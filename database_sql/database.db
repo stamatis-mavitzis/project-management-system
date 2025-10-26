@@ -1,0 +1,791 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+-- Started on 2025-10-26 14:06:21 EET
+
+\restrict 54wulTK32nCVFaBFAlF88SLclnficKeuOzjVV4grGJCje8HucHbbRutgb9tsutB
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:L0ixYxjzIh5jXJO/13VSNw==$bSJq5R1q8JCZOyUw3pvFGggoR2c5bZgLaRuDfa5u76E=:zhuDUQ+SvSR7RSGn9u0jUsL6Ow8ybAgwBY1rtZl6qWE=';
+
+--
+-- User Configurations
+--
+
+
+
+
+
+
+
+
+\unrestrict 54wulTK32nCVFaBFAlF88SLclnficKeuOzjVV4grGJCje8HucHbbRutgb9tsutB
+
+--
+-- Databases
+--
+
+--
+-- Database "template1" dump
+--
+
+\connect template1
+
+--
+-- PostgreSQL database dump
+--
+
+\restrict ZW7trGb2qRKRW9F92aZma097PthkWvCWKKJTTqQDqhXiZMpCxcl5tR3iPDGIf4S
+
+-- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
+-- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
+
+-- Started on 2025-10-26 14:06:21 EET
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+-- Completed on 2025-10-26 14:06:21 EET
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict ZW7trGb2qRKRW9F92aZma097PthkWvCWKKJTTqQDqhXiZMpCxcl5tR3iPDGIf4S
+
+--
+-- Database "postgres" dump
+--
+
+\connect postgres
+
+--
+-- PostgreSQL database dump
+--
+
+\restrict Ko3YxzCguSDuPcomo93dkc0nUJjdhUt3hRZqdaKeZkXTpmrUVcKDa3PTWtKuuqP
+
+-- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
+-- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
+
+-- Started on 2025-10-26 14:06:21 EET
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 859 (class 1247 OID 17452)
+-- Name: task_priority; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.task_priority AS ENUM (
+    'LOW',
+    'MEDIUM',
+    'HIGH'
+);
+
+
+ALTER TYPE public.task_priority OWNER TO postgres;
+
+--
+-- TOC entry 856 (class 1247 OID 17444)
+-- Name: task_status; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.task_status AS ENUM (
+    'TODO',
+    'IN_PROGRESS',
+    'DONE'
+);
+
+
+ALTER TYPE public.task_status OWNER TO postgres;
+
+--
+-- TOC entry 850 (class 1247 OID 17428)
+-- Name: user_role; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.user_role AS ENUM (
+    'ADMIN',
+    'TEAM_LEADER',
+    'MEMBER'
+);
+
+
+ALTER TYPE public.user_role OWNER TO postgres;
+
+--
+-- TOC entry 853 (class 1247 OID 17436)
+-- Name: user_status; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.user_status AS ENUM (
+    'ACTIVE',
+    'INACTIVE',
+    'PENDING'
+);
+
+
+ALTER TYPE public.user_status OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 225 (class 1259 OID 17558)
+-- Name: attachments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.attachments (
+    attachment_id integer NOT NULL,
+    file_name character varying(255) NOT NULL,
+    file_path text NOT NULL,
+    uploaded_by integer,
+    task_id integer,
+    comment_id integer,
+    uploaded_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.attachments OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 17557)
+-- Name: attachments_attachment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.attachments_attachment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.attachments_attachment_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3528 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: attachments_attachment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.attachments_attachment_id_seq OWNED BY public.attachments.attachment_id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 17538)
+-- Name: comments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.comments (
+    comment_id integer NOT NULL,
+    task_id integer,
+    author_id integer,
+    content text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.comments OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 17537)
+-- Name: comments_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.comments_comment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.comments_comment_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3529 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: comments_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.comments_comment_id_seq OWNED BY public.comments.comment_id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 17510)
+-- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tasks (
+    task_id integer NOT NULL,
+    team_id integer,
+    title character varying(200) NOT NULL,
+    description text,
+    created_by integer,
+    assigned_to integer,
+    status public.task_status DEFAULT 'TODO'::public.task_status NOT NULL,
+    priority public.task_priority DEFAULT 'MEDIUM'::public.task_priority NOT NULL,
+    due_date date,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.tasks OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 17509)
+-- Name: tasks_task_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tasks_task_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tasks_task_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3530 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: tasks_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tasks_task_id_seq OWNED BY public.tasks.task_id;
+
+
+--
+-- TOC entry 219 (class 1259 OID 17493)
+-- Name: team_members; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.team_members (
+    team_id integer NOT NULL,
+    user_id integer NOT NULL,
+    joined_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.team_members OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 17477)
+-- Name: teams; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.teams (
+    team_id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description text,
+    leader_id integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.teams OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 17476)
+-- Name: teams_team_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.teams_team_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.teams_team_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3531 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: teams_team_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.teams_team_id_seq OWNED BY public.teams.team_id;
+
+
+--
+-- TOC entry 216 (class 1259 OID 17460)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    email character varying(100) NOT NULL,
+    password text NOT NULL,
+    name character varying(50) NOT NULL,
+    surname character varying(50) NOT NULL,
+    role public.user_role DEFAULT 'MEMBER'::public.user_role NOT NULL,
+    status public.user_status DEFAULT 'PENDING'::public.user_status NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 17459)
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.users_user_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3532 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- TOC entry 3334 (class 2604 OID 17561)
+-- Name: attachments attachment_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.attachments ALTER COLUMN attachment_id SET DEFAULT nextval('public.attachments_attachment_id_seq'::regclass);
+
+
+--
+-- TOC entry 3332 (class 2604 OID 17541)
+-- Name: comments comment_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments ALTER COLUMN comment_id SET DEFAULT nextval('public.comments_comment_id_seq'::regclass);
+
+
+--
+-- TOC entry 3327 (class 2604 OID 17513)
+-- Name: tasks task_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks ALTER COLUMN task_id SET DEFAULT nextval('public.tasks_task_id_seq'::regclass);
+
+
+--
+-- TOC entry 3324 (class 2604 OID 17480)
+-- Name: teams team_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams ALTER COLUMN team_id SET DEFAULT nextval('public.teams_team_id_seq'::regclass);
+
+
+--
+-- TOC entry 3319 (class 2604 OID 17463)
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- TOC entry 3522 (class 0 OID 17558)
+-- Dependencies: 225
+-- Data for Name: attachments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.attachments (attachment_id, file_name, file_path, uploaded_by, task_id, comment_id, uploaded_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3520 (class 0 OID 17538)
+-- Dependencies: 223
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.comments (comment_id, task_id, author_id, content, created_at) FROM stdin;
+1	1	3	Started working on JWT authentication module.	2025-10-22 18:16:10.386063
+2	1	2	test comment	2025-10-25 13:58:35.371369
+3	1	2	this is a comment	2025-10-25 14:04:33.89736
+4	4	2	Workd hard, happy coding!	2025-10-26 06:18:22.294336
+5	1	3	I have start working	2025-10-26 06:27:25.302071
+\.
+
+
+--
+-- TOC entry 3518 (class 0 OID 17510)
+-- Dependencies: 221
+-- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tasks (task_id, team_id, title, description, created_by, assigned_to, status, priority, due_date, created_at, updated_at) FROM stdin;
+4	1	This is a test Task name	Description develop an app that looks like Jira	2	14	TODO	LOW	2026-01-01	2025-10-25 15:23:55.53071	2025-10-25 15:23:55.53071
+1	1	Implement Authentication	Develop user login and JWT auth system	2	3	IN_PROGRESS	HIGH	2025-12-31	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
+5	6	Here is your Task to implement	Create a database for the project	2	3	DONE	HIGH	2026-02-02	2025-10-26 01:19:01.014552	2025-10-26 01:19:01.014552
+\.
+
+
+--
+-- TOC entry 3516 (class 0 OID 17493)
+-- Dependencies: 219
+-- Data for Name: team_members; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.team_members (team_id, user_id, joined_at) FROM stdin;
+1	3	2025-10-22 18:16:10.386063
+1	6	2025-10-24 22:50:57.030693
+1	14	2025-10-25 13:30:07.325174
+6	3	2025-10-25 23:06:47.725373
+6	6	2025-10-25 23:07:01.222974
+\.
+
+
+--
+-- TOC entry 3515 (class 0 OID 17477)
+-- Dependencies: 218
+-- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.teams (team_id, name, description, leader_id, created_at) FROM stdin;
+1	Development Team	Handles all software development tasks	2	2025-10-22 18:16:10.386063
+6	Software Implementation show skills	Create and Implement Project on Google Cloud	2	2025-10-25 23:04:47.310944
+\.
+
+
+--
+-- TOC entry 3513 (class 0 OID 17460)
+-- Dependencies: 216
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, username, email, password, name, surname, role, status, created_at, updated_at) FROM stdin;
+1	admin	admin@gmail.com	123	System	Admin	ADMIN	ACTIVE	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
+2	leader1	leader@gmail.com	123	Alice	Smith	TEAM_LEADER	ACTIVE	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
+3	member1	member@gmail.com	123	Bob	Brown	MEMBER	ACTIVE	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
+11	leader2	leader2@gmail.com	123	a	A	TEAM_LEADER	ACTIVE	2025-10-22 20:31:33.028578	2025-10-22 20:31:33.028578
+13	leader3	leader3@gmail.com	123	a	a	TEAM_LEADER	ACTIVE	2025-10-22 20:33:33.305442	2025-10-22 20:33:33.305442
+15	kostakis	kolokithopoylos@hotmail.com	123	kostakis	botrini	MEMBER	INACTIVE	2025-10-23 01:12:53.685286	2025-10-23 01:12:53.685286
+6	member2	member2@gmail.com	123	b	b	MEMBER	ACTIVE	2025-10-22 20:11:39.348129	2025-10-22 20:11:39.348129
+14	sakos	sakos@gmail.com	123	sakos	sasakos	MEMBER	ACTIVE	2025-10-23 00:09:59.962394	2025-10-23 00:09:59.962394
+8	member3	member3@gmail.om	123	a	A	MEMBER	ACTIVE	2025-10-22 20:22:10.976003	2025-10-22 20:22:10.976003
+10	member4	member4@gmail.com	123	a	a	MEMBER	ACTIVE	2025-10-22 20:29:00.818128	2025-10-22 20:29:00.818128
+16	membertest	membertest@gmail.com	123	membertest	test	MEMBER	INACTIVE	2025-10-25 23:06:03.966808	2025-10-25 23:06:03.966808
+5	admin2	admin2@gmail.com	123	a	a	ADMIN	ACTIVE	2025-10-22 19:54:50.58989	2025-10-22 19:54:50.58989
+\.
+
+
+--
+-- TOC entry 3533 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: attachments_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.attachments_attachment_id_seq', 1, false);
+
+
+--
+-- TOC entry 3534 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: comments_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.comments_comment_id_seq', 5, true);
+
+
+--
+-- TOC entry 3535 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: tasks_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tasks_task_id_seq', 5, true);
+
+
+--
+-- TOC entry 3536 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: teams_team_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.teams_team_id_seq', 6, true);
+
+
+--
+-- TOC entry 3537 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 16, true);
+
+
+--
+-- TOC entry 3357 (class 2606 OID 17566)
+-- Name: attachments attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.attachments
+    ADD CONSTRAINT attachments_pkey PRIMARY KEY (attachment_id);
+
+
+--
+-- TOC entry 3354 (class 2606 OID 17546)
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_pkey PRIMARY KEY (comment_id);
+
+
+--
+-- TOC entry 3352 (class 2606 OID 17521)
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (task_id);
+
+
+--
+-- TOC entry 3348 (class 2606 OID 17498)
+-- Name: team_members team_members_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT team_members_pkey PRIMARY KEY (team_id, user_id);
+
+
+--
+-- TOC entry 3343 (class 2606 OID 17487)
+-- Name: teams teams_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3345 (class 2606 OID 17485)
+-- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_pkey PRIMARY KEY (team_id);
+
+
+--
+-- TOC entry 3337 (class 2606 OID 17475)
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- TOC entry 3339 (class 2606 OID 17471)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 3341 (class 2606 OID 17473)
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- TOC entry 3355 (class 1259 OID 17584)
+-- Name: idx_comments_task_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_comments_task_id ON public.comments USING btree (task_id);
+
+
+--
+-- TOC entry 3349 (class 1259 OID 17583)
+-- Name: idx_tasks_assigned_to; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_tasks_assigned_to ON public.tasks USING btree (assigned_to);
+
+
+--
+-- TOC entry 3350 (class 1259 OID 17582)
+-- Name: idx_tasks_team_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_tasks_team_id ON public.tasks USING btree (team_id);
+
+
+--
+-- TOC entry 3346 (class 1259 OID 17585)
+-- Name: idx_team_members_user_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_team_members_user_id ON public.team_members USING btree (user_id);
+
+
+--
+-- TOC entry 3366 (class 2606 OID 17577)
+-- Name: attachments attachments_comment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.attachments
+    ADD CONSTRAINT attachments_comment_id_fkey FOREIGN KEY (comment_id) REFERENCES public.comments(comment_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3367 (class 2606 OID 17572)
+-- Name: attachments attachments_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.attachments
+    ADD CONSTRAINT attachments_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(task_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3368 (class 2606 OID 17567)
+-- Name: attachments attachments_uploaded_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.attachments
+    ADD CONSTRAINT attachments_uploaded_by_fkey FOREIGN KEY (uploaded_by) REFERENCES public.users(user_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3364 (class 2606 OID 17552)
+-- Name: comments comments_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_author_id_fkey FOREIGN KEY (author_id) REFERENCES public.users(user_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3365 (class 2606 OID 17547)
+-- Name: comments comments_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(task_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3361 (class 2606 OID 17532)
+-- Name: tasks tasks_assigned_to_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_assigned_to_fkey FOREIGN KEY (assigned_to) REFERENCES public.users(user_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3362 (class 2606 OID 17527)
+-- Name: tasks tasks_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(user_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3363 (class 2606 OID 17522)
+-- Name: tasks tasks_team_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(team_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3359 (class 2606 OID 17499)
+-- Name: team_members team_members_team_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT team_members_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(team_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3360 (class 2606 OID 17504)
+-- Name: team_members team_members_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT team_members_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3358 (class 2606 OID 17488)
+-- Name: teams teams_leader_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES public.users(user_id) ON DELETE SET NULL;
+
+
+-- Completed on 2025-10-26 14:06:21 EET
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict Ko3YxzCguSDuPcomo93dkc0nUJjdhUt3hRZqdaKeZkXTpmrUVcKDa3PTWtKuuqP
+
+-- Completed on 2025-10-26 14:06:21 EET
+
+--
+-- PostgreSQL database cluster dump complete
+--
+
