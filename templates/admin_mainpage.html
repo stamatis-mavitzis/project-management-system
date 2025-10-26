@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Client Main</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Welcome to the Admin Main Page</h1>
+
+  {% if admin %}
+    <p><strong>Username:</strong> {{ admin.username }}</p>
+    <p><strong>Email:</strong> {{ admin.email }}</p>
+  {% endif %}
+
+  <!-- Display logged-in client email -->
+  {% if session.client_email %}
+    <p>Logged in as: <strong>{{ session.client_email }}</strong></p>
+  {% endif %}
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Buttons -->
+<button id="admin_redirect_manageUsers">Manage Users</button>
+<button id="admin_redirect_manageTeams">Manage Teams</button>
+<button id="admin_redirect_show_tasks_and_projects">Show Tasks and Projects</button>
+<button id="redirectButton_logout">Logout</button>
+</body>
+</html>
+    

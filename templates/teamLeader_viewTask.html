@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Task - {{ task.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<h1>Task Details</h1>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Title</th>
+        <td>{{ task.title }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ task.description }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>{{ task.status }}</td>
+    </tr>
+    <tr>
+        <th>Priority</th>
+        <td>{{ task.priority }}</td>
+    </tr>
+    <tr>
+        <th>Due Date</th>
+        <td>{{ task.due_date }}</td>
+    </tr>
+    <tr>
+        <th>Created By</th>
+        <td>{{ task.created_by_username }}</td>
+    </tr>
+    <tr>
+        <th>Assigned To</th>
+        <td>{{ task.assigned_to_username }}</td>
+    </tr>
+</table>
+
+<hr>
+<h2>💬 Comments</h2>
+
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <strong>{{ comment.username }}</strong> 
+                <em>({{ comment.created_at.strftime('%Y-%m-%d %H:%M') }})</em><br>
+                {{ comment.content }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No comments yet.</p>
+{% endif %}
+
+<hr>
+
+<form action="{{ url_for('teamLeader_mainpage_bp.add_comment', task_id=task.task_id) }}" method="POST">
+    <textarea name="content" placeholder="Write your comment..." required></textarea><br>
+    <button type="submit">💬 Add Comment</button>
+</form>
+
+<hr>
+<form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_manage_teams') }}">
+  <button type="submit" class="btn-back">⬅ Back to My Teams</button>
+</form>
+
+</body>
+</html>

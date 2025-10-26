@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Team Leader Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Welcome, Team Leader!</h1>
+
+  {% if leader %}
+    <p><strong>Username:</strong> {{ leader.username }}</p>
+    <p><strong>Email:</strong> {{ leader.email }}</p>
+  {% endif %}
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Buttons -->
+  <div style="margin-top: 20px;">
+    <button id="teamLeader_redirect_manageTeams">Manage Teams</button>
+    <button id="teamLeader_redirect_manageTasksProjects">View Tasks & Projects</button>
+    <button id="redirectButton_logout">Logout</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ task.title }} — Task</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <h1>{{ task.title }}</h1>
+  <p><strong>Team:</strong> {{ task.team_name or "-" }}</p>
+  <p><strong>Created by:</strong> {{ task.created_by_username }}</p>
+  <p><strong>Status:</strong> {{ task.status }}</p>
+  <p><strong>Priority:</strong> {{ task.priority }}</p>
+  <p><strong>Due:</strong> {{ task.due_date.strftime("%Y-%m-%d") if task.due_date else "-" }}</p>
+  <p><strong>Description:</strong><br>{{ task.description }}</p>
+
+  <h2>Comments</h2>
+  {% if comments %}
+    <ul>
+      {% for c in comments %}
+      <li>
+        <strong>{{ c.username }}</strong> — {{ c.created_at.strftime("%Y-%m-%d %H:%M") }}<br>
+        {{ c.content }}
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No comments yet.</p>
+  {% endif %}
+
+  <a class="btn" href="{{ url_for('member_mainpage_bp.member_view_tasks') }}">⬅ Back to My Tasks</a>
+</body>
+</html>

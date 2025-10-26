@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Teams</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Manage Teams</h1>
+
+  <!-- Flash Notifications -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <table border="1">
+    <tr>
+      <th>Team Name</th>
+      <th>Description</th>
+      <th>Leader</th>
+      <th>Members</th>
+      <th>Actions</th>
+    </tr>
+    {% for team in teams %}
+    <tr>
+      <td>{{ team.name }}</td>
+      <td>{{ team.description }}</td>
+      <td>{{ team.leader }}</td>
+      <td>{{ team.members }}</td>
+      <td>
+        <button onclick="viewTeam('{{ team.team_id }}')">View</button>
+        <button onclick="deleteTeam('{{ team.team_id }}')">Delete</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Create New Team</h2>
+  <form method="POST" action="{{ url_for('admin_mainpage_bp.admin_manage_teams') }}">
+    <label for="team_name">Team Name:</label>
+    <input type="text" name="team_name" required>
+    <br><br>
+    <label for="description">Description:</label>
+    <input type="text" name="description" required>
+    <br><br>
+    <label for="leader_username">Leader Username:</label>
+    <input type="text" name="leader_username" required>
+    <br><br>
+    <button type="submit">Create</button>
+  </form>
+
+  <button id="redirectButton_admin_mainpage">⬅ Back to Main Page</button>
+</body>
+</html>

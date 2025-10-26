@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ team.team_name }} - Members</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Team: {{ team.team_name }}</h1>
+  <p><strong>Description:</strong> {{ team.description }}</p>
+  <p><strong>Leader:</strong> {{ team.leader_name }}</p>
+
+  <h2>Members</h2>
+  {% if members %}
+    <table border="1">
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+      {% for m in members %}
+      <tr>
+        <td>{{ m.username }}</td>
+        <td>{{ m.email }}</td>
+        <td>{{ m.role }}</td>
+        <td>{{ m.status }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No members found in this team.</p>
+  {% endif %}
+
+  <br>
+  <button id="redirectButton_member_mainpage">
+    ⬅ Back to My Teams
+  </button>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Teams</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+
+<h1>Teams You Are Included In</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<p>Logged in as: <strong>{{ member.username }}</strong></p>
+
+{% if teams %}
+  <table border="1">
+    <tr>
+      <th>Team Name</th>
+      <th>Description</th>
+      <th>Leader</th>
+      <th>Members</th>
+      <th>Actions</th>
+    </tr>
+    {% for team in teams %}
+    <tr>
+      <td>{{ team.team_name }}</td>
+      <td>{{ team.description }}</td>
+      <td>{{ team.leader_name }}</td>
+      <td>{{ team.member_count }}</td>
+      <td>
+        <button 
+          onclick="window.location.href=`{{ url_for('member_mainpage_bp.member_view_team', team_id=team.team_id) }}`;">
+          👥 View Members
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p>You are not a member of any teams yet.</p>
+{% endif %}
+
+<br>
+<button id="redirectButton_member_mainpage"
+        onclick="window.location.href=`{{ url_for('member_mainpage_bp.member_mainpage') }}`;">
+  ⬅ Back to Main Page
+</button>
+
+</body>
+</html>

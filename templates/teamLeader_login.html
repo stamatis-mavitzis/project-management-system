@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Team Leader Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Team Leader Login</h1>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- FORM -->
+  <form id="loginForm" method="POST" action="{{ url_for('teamLeader_authenticate_bp.teamLeader_login') }}">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <button type="submit">Login as Team Leader</button>
+  </form>
+
+  <button id="redirect_to_home">Back to Home</button>
+</body>
+</html>

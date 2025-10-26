@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Show Tasks and Projects</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>All Projects and Tasks</h1>
+
+  <h2>Projects</h2>
+  <table border="1">
+    <tr>
+      <th>Project Name</th>
+      <th>Team</th>
+      <th>Description</th>
+      <th>Created At</th>
+    </tr>
+    {% for project in projects %}
+    <tr>
+      <td>{{ project.name }}</td>
+      <td>{{ project.team_name }}</td>
+      <td>{{ project.description }}</td>
+      <td>{{ project.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Tasks</h2>
+  <table border="1">
+    <tr>
+      <th>Title</th>
+      <th>Assigned To</th>
+      <th>Status</th>
+      <th>Due Date</th>
+      <th>Priority</th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+      <td>{{ task.title }}</td>
+      <td>{{ task.assigned_to }}</td>
+      <td>{{ task.status }}</td>
+      <td>{{ task.due_date }}</td>
+      <td>{{ task.priority }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <button id="redirectButton_admin_mainpage">⬅ Back to Main Page</button>
+</body>
+</html>

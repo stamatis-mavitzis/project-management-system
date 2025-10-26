@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage My Teams</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Teams I Belong To</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if teams and teams|length > 0 %}
+    <table border="1">
+      <tr>
+        <th>Team Name</th>
+        <th>Description</th>
+        <th>Members</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+      {% for team in teams %}
+      <tr>
+        <td>{{ team.name }}</td>
+        <td>{{ team.description or "No description" }}</td>
+        <td>{{ team.member_count }}</td>
+        <td>{% if team.is_leader %}Leader{% else %}Member{% endif %}</td>
+        <td>
+          <form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_manage_team', team_id=team.team_id) }}" method="get">
+            <button type="submit">Manage</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>You are not part of any teams yet.</p>
+  {% endif %}
+
+  <br>
+  <form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_mainpage') }}" method="get">
+    <button type="submit">Back to Dashboard</button>
+  </form>
+</body>
+</html>

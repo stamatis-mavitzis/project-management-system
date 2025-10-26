@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Comment</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+
+  <h1>Add Comment for: {{ task.title }}</h1>
+  <p>{{ task.description }}</p>
+
+  <hr>
+
+  <form action="{{ url_for('member_mainpage_bp.member_add_comment', task_id=task_id) }}" method="POST">
+    <textarea name="content" rows="4" cols="50" placeholder="Write your comment..." required></textarea><br><br>
+    <button type="submit">💬 Submit Comment</button>
+  </form>
+
+  <br>
+  <form action="{{ url_for('member_mainpage_bp.member_view_tasks') }}" method="GET" style="display:inline;">
+    <button type="submit">⬅ Back to My Tasks</button>
+  </form> 
+
+</body>
+</html>

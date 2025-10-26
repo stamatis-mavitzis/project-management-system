@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notifications & Deadlines</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <h1>🔔 Notifications & Deadlines</h1>
+
+  {% if session.member_email %}
+    <p>Logged in as: <strong>{{ session.member_email }}</strong></p>
+  {% endif %}
+
+  <hr>
+
+  <h2>💬 Recent Comments on Your Tasks</h2>
+  {% if comments %}
+    <table border="1">
+      <tr><th>Task</th><th>Comment</th><th>Author</th><th>Date</th></tr>
+      {% for c in comments %}
+        <tr>
+          <td>{{ c.task_title }}</td>
+          <td>{{ c.content }}</td>
+          <td>{{ c.author }}</td>
+          <td>{{ c.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No new comments yet.</p>
+  {% endif %}
+
+  <hr>
+
+  <h2>📅 All Task Deadlines</h2>
+  {% if deadlines %}
+    <table border="1">
+      <tr><th>Task</th><th>Due Date</th><th>Status</th><th>Priority</th></tr>
+      {% for d in deadlines %}
+        <tr>
+          <td>{{ d.title }}</td>
+          <td>{{ d.due_date.strftime("%Y-%m-%d") }}</td>
+          <td>{{ d.status }}</td>
+          <td>{{ d.priority }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No tasks with deadlines yet.</p>
+  {% endif %}
+
+  <br>
+  <form action="{{ url_for('member_mainpage_bp.member_view_tasks') }}" method="get">
+    <button type="submit">⬅ Back to My Tasks</button>
+  </form>
+
+</body>
+</html>

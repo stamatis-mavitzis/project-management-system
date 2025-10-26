@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Member Main</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>Welcome to the Main Page</h1>
+
+  <!-- Display logged-in member username and email -->
+  {% if member %}
+    <div class="user-info">
+      <p><strong>Username:</strong> {{ member.username }}</p>
+      <p><strong>Email:</strong> {{ member.email }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Buttons -->
+  <button id="member_redirect_teams_included">My Teams</button>
+  <button id="member_redirect_tasks">My Tasks</button>
+  <button id="member_redirect_notifications_and_deadlines">Notifications and Deadlines</button>
+  <button id="redirectButton_logout">Logout</button>
+</body>
+</html>

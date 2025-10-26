@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Tasks</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+
+  <h1>My Tasks</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% if session.member_email %}
+    <p>Logged in as: <strong>{{ session.member_email }}</strong></p>
+  {% endif %}
+
+  <hr>
+
+  {% if tasks %}
+    <table border="1">
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Due Date</th>
+        <th>Team Leader</th>
+        <th>Actions</th>
+      </tr>
+
+      {% for task in tasks %}
+      <tr>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '—' }}</td>
+        <td>{{ task.leader_name if task.leader_name else '—' }}</td>
+        <td style="white-space: nowrap;">
+
+          <!-- View Task Button -->
+          <form method="GET" action="{{ url_for('member_mainpage_bp.member_view_task', task_id=task.task_id) }}" style="display:inline;">
+            <button type="submit">👁 View</button>
+          </form>
+
+          <!-- Add Comment Button -->
+          <form action="{{ url_for('member_mainpage_bp.member_add_comment_page', task_id=task.task_id) }}" method="GET" style="display:inline;">
+            <button type="submit">💬 Add Comment</button>
+          </form>
+
+          <!-- Change Status Form -->
+          <form action="{{ url_for('member_mainpage_bp.member_change_status', task_id=task.task_id) }}" method="POST" style="display:inline;">
+            <select name="new_status" required>
+              <option value="TODO" {% if task.status == 'TODO' %}selected{% endif %}>TODO</option>
+              <option value="IN_PROGRESS" {% if task.status == 'IN_PROGRESS' %}selected{% endif %}>IN PROGRESS</option>
+              <option value="DONE" {% if task.status == 'DONE' %}selected{% endif %}>DONE</option>
+            </select>
+            <button type="submit">🔁 Update</button>
+          </form>
+
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>You have no assigned tasks yet.</p>
+  {% endif %}
+
+  <br>
+  <button id="redirectButton_member_mainpage">
+    ⬅ Back to My Teams
+  </button>
+
+</body>
+</html>

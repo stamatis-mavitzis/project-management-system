@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Team Detailes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+  <h1>{{ team.name }}</h1>
+  <p><strong>Description:</strong> {{ team.description }}</p>
+  <p><strong>Leader:</strong> {{ team.leader }}</p>
+
+  <h2>Members</h2>
+  <ul>
+    {% for member in members %}
+      <li>{{ member.username }} ({{ member.role }}) - {{ member.email }}</li>
+    {% else %}
+      <li>No members yet.</li>
+    {% endfor %}
+  </ul>
+
+  <button id="admin_redirect_manageTeams">⬅ Back</button>
+</body>
+</html>
