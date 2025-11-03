@@ -35,11 +35,26 @@ def admin_mainpage():
 # ---------------------------------------------
 @admin_mainpage_bp.route("/admin-manageUsers")
 def admin_manage_users():
+    """Displays all users with signup and activation (update) dates."""
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT username, email, role, status FROM users ORDER BY username;")
+
+    cur.execute("""
+        SELECT 
+            username,
+            email,
+            role,
+            status,
+            TO_CHAR(created_at, 'DD/MM/YY HH24:MI') AS signup_date,
+            TO_CHAR(updated_at, 'DD/MM/YY HH24:MI') AS activated_date
+        FROM users
+        ORDER BY username;
+    """)
+
     users = cur.fetchall()
+    cur.close()
     conn.close()
+
     return render_template("admin_manageUsers.html", users=users)
 
 
@@ -105,15 +120,21 @@ def admin_manage_teams():
 # ---------------------------------------------
 @admin_mainpage_bp.route("/activate_user/<string:username>", methods=["POST"])
 def activate_user(username):
-    """Activate any user account."""
+    """Activate a user account and record activation timestamp."""
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
-        cur.execute("UPDATE users SET status = 'ACTIVE' WHERE username = %s;", (username,))
+        cur.execute("""
+            UPDATE users
+            SET status = 'ACTIVE',
+                updated_at = NOW()
+            WHERE username = %s;
+        """, (username,))
         conn.commit()
         return jsonify({"message": f"✅ User {username} activated successfully!"}), 200
     except Exception as e:
         conn.rollback()
+        print("❌ ERROR activating user:", e)
         return jsonify({"error": str(e)}), 500
     finally:
         cur.close()
@@ -135,3 +156,81 @@ def deactivate_user(username):
     finally:
         cur.close()
         conn.close()
+
+
+# ---------------------------------------------
+# --- View Single Team Details ---
+# ---------------------------------------------
+@admin_mainpage_bp.route("/admin-viewTeam/<int:team_id>")
+def admin_view_team(team_id):
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    cur.execute("""
+        SELECT 
+            t.team_id,
+            t.name,
+            t.description,
+            u.username AS leader
+        FROM teams t
+        LEFT JOIN users u ON t.leader_id = u.user_id
+        WHERE t.team_id = %s;
+    """, (team_id,))
+    team = cur.fetchone()
+
+    cur.execute("""
+        SELECT u.username, u.email, u.role, u.status
+        FROM team_members tm
+        JOIN users u ON tm.user_id = u.user_id
+        WHERE tm.team_id = %s;
+    """, (team_id,))
+    members = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    if not team:
+        flash("Team not found.", "error")
+        return redirect(url_for("admin_mainpage_bp.admin_manage_teams"))
+
+    return render_template("admin_viewTeam.html", team=team, members=members)
+
+
+@admin_mainpage_bp.route("/admin-show_tasks_and_projects")
+def admin_show_tasks_and_projects():
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    # ✅ Get all teams and their leaders
+    cur.execute("""
+        SELECT 
+            t.team_id,
+            t.name AS team_name,
+            u.username AS leader_name,
+            t.description,
+            t.created_at
+        FROM teams t
+        LEFT JOIN users u ON t.leader_id = u.user_id
+        ORDER BY t.created_at DESC;
+    """)
+    projects = cur.fetchall()
+
+    # ✅ Get all tasks with assigned users
+    cur.execute("""
+        SELECT 
+            t.title,
+            u.username AS assigned_to,
+            t.status,
+            t.due_date,
+            t.priority
+        FROM tasks t
+        LEFT JOIN users u ON t.assigned_to = u.user_id
+        ORDER BY t.created_at DESC;
+    """)
+    tasks = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template("admin_show_tasks_and_projects.html", projects=projects, tasks=tasks)
+

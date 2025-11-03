@@ -25,6 +25,8 @@
       <th>Email</th>
       <th>Role</th>
       <th>Status</th>
+      <th>Signup Date</th>
+      <th>Activated Date</th>
       <th>Actions</th>
     </tr>
 
@@ -34,6 +36,14 @@
       <td>{{ user.email }}</td>
       <td>{{ user.role }}</td>
       <td>{{ user.status }}</td>
+      <td>{{ user.signup_date | format_date }}</td>
+      <td>
+        {% if user.status == "ACTIVE" and user.activated_date %}
+          {{ user.activated_date | format_date }}
+        {% else %}
+          —
+        {% endif %}
+      </td>
       <td>
         <button type="button" onclick="activateUser('{{ user.username }}')">Approve</button>
         <button type="button" onclick="deactivateUser('{{ user.username }}')">Deactivate</button>

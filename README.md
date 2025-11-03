@@ -1,233 +1,273 @@
 # Project Management System (ΠΛΗ513)
 
-A web-based Project Management System (PMS) developed for the course ΠΛΗ513 – Υπηρεσίες στο Υπολογιστικό Νέφος και την Ομίχλη.  
-The system supports multiple user roles — Admin, Team Leader, and Team Member — allowing the management of teams, tasks, and comments.
+A complete **web-based Project Management System (PMS)** developed as part of the course **ΠΛΗ513 – Υπηρεσίες στο Υπολογιστικό Νέφος και την Ομίχλη**.
+This system implements a simplified version of tools like **Jira** or **Trello**, focusing on team collaboration, task management, and progress tracking — built using **Flask (Python)** and **PostgreSQL**.
 
-## Features
+---
 
-- User Authentication and Role Management
-- Admin Panel for managing users, teams, and roles
-- Team Leader Dashboard for creating and managing teams and tasks
-- Task creation, assignment, and status tracking
-- Comment system for tasks
-- PostgreSQL database integration
-- HTML/CSS/Jinja2 frontend templates
-- Flask backend application
+## Overview
+
+This application allows different roles of users — **Admin**, **Team Leader**, and **Team Member** — to manage teams, create and assign tasks, and collaborate through comments and notifications.
+
+It follows a **modular microservice-inspired structure** with clear separation between:
+
+* User Authentication
+* Team Management
+* Task and Comment Management
+* Frontend (UI) Rendering
+
+The backend is implemented using **Flask Blueprints**, and the frontend is composed of **Jinja2 HTML templates** integrated with CSS and JavaScript.
+
+---
+
+## Features and Capabilities
+
+### Core Features
+
+* Multi-role user authentication (Admin / Team Leader / Member)
+* Session-based login/logout system
+* Role-based dashboards and permissions
+* Team creation and member management
+* Task lifecycle tracking (TODO → IN PROGRESS → DONE)
+* Task priority and deadline management
+* Comment and collaboration system per task
+* User activation/deactivation by Admin
+* PostgreSQL relational data model
+* File upload support for extensions defined in configuration
+* HTML/Jinja2 templating and static asset management
+
+### Admin Panel
+
+* Manage all users (activate, deactivate, change roles)
+* Create, delete, and view teams
+* Assign team leaders
+* View all projects and tasks across the system
+
+### Team Leader Dashboard
+
+* Create and manage teams
+* Add or remove team members
+* Create, assign, edit, or delete tasks
+* Add comments on tasks
+* View aggregated team tasks and statuses
+
+### Team Member Dashboard
+
+* View assigned tasks with deadlines and priorities
+* Comment on tasks
+* Change task status (TODO, IN_PROGRESS, DONE)
+* See team membership and leader information
+* Receive updates and notifications about deadlines and comments
+
+---
 
 ## Project Structure
 
 ```
 Project/
 │
-├── backend_server_app.py                 # Flask application entry point
-├── config.py                             # Configuration (database credentials, upload paths)
-├── db.py                                 # PostgreSQL connection handler
-├── README.md                             # Project documentation
-├── source_run_flash.sh                   # Shell script to run Flask
-├── requirements.txt                      # Required Python libraries
+├── backend_server_app.py                 # Flask application entry point and blueprint registration
+├── config.py                             # Configuration for database, secrets, upload paths
+├── db.py                                 # PostgreSQL connection and error handling
+├── requirements.txt                      # Python dependencies
+├── source_run_flash.sh                   # Shell script to launch Flask server
 │
 ├── databe_sql/
-│   ├── create_tables.sql                 # SQL script for schema and initial data
-│   └── database.db                       # Database file (if exported)
+│   ├── create_tables.sql                 # SQL schema and initial dataset
+│   └── database.db                       # Optional database export
 │
-├── routes/                               # Flask Blueprints (modular route structure)
-│   ├── admin_authenticate.py             # Admin authentication logic
-│   ├── admin_mainpage.py                 # Admin dashboard & user/team management
-│   ├── admin_teamLeader_member_options.py# Role selection page
-│   ├── homepage.py                       # Home page route
-│   ├── member_authenticate.py            # Member authentication
-│   ├── member_mainpage.py                # Member dashboard, tasks, and comments
-│   ├── teamLeader_authenticate.py        # Team Leader authentication
-│   └── teamLeader_mainpage.py            # Team Leader dashboard and task management
+├── routes/                               # Modular Flask blueprints
+│   ├── homepage.py                       # Entry route for role selection
+│   ├── admin_authenticate.py             # Admin signup/login/logout
+│   ├── admin_mainpage.py                 # Admin dashboard and management actions
+│   ├── admin_teamLeader_member_options.py# Role selection pages
+│   ├── teamLeader_authenticate.py        # Team Leader authentication routes
+│   ├── teamLeader_mainpage.py            # Team Leader task and team management
+│   ├── member_authenticate.py            # Member authentication routes
+│   └── member_mainpage.py                # Member dashboard and task management
 │
-├── static/                               # Static assets: styles, scripts, uploads
+├── static/                               # Static assets (CSS, JS, uploads)
 │   ├── css/
 │   │   ├── style.css
 │   │   └── style2.css
 │   ├── script/
 │   │   └── script.js
-│   └── uploads/                          # User-uploaded files
+│   └── uploads/                          # Uploaded user files
 │
-├── templates/                            # HTML templates (Jinja2)
+├── templates/                            # HTML pages (Jinja2)
+│   ├── index.html                        # Homepage
 │   ├── admin_login.html
 │   ├── admin_mainpage.html
-│   ├── admin_manageTeams.html
 │   ├── admin_manageUsers.html
-│   ├── admin_or_teamLeader_or_member.html
+│   ├── admin_manageTeams.html
 │   ├── admin_show_tasks_and_projects.html
-│   ├── index.html
-│   ├── member_addComment.html
-│   ├── member_login.html
-│   ├── member_mainpage.html
-│   ├── member_notifications_and_deadlines.html
-│   ├── member_signin_or_login.html
-│   ├── member_signup.html
-│   ├── member_teamsIncluded.html
-│   ├── member_viewTask.html
-│   ├── member_viewTasks.html
-│   ├── member_viewTeam.html
-│   ├── teamLeader_editTask.html
-│   ├── teamLeader_login.html
+│   ├── admin_or_teamLeader_or_member.html
 │   ├── teamLeader_mainpage.html
-│   ├── teamLeader_manageTasksProjects.html
-│   ├── teamLeader_manageTeams.html
-│   ├── teamLeader_signin_or_login.html
-│   ├── teamLeader_signup.html
 │   ├── teamLeader_teamDetails.html
-│   └── teamLeader_viewTask.html
+│   ├── teamLeader_manageTasksProjects.html
+│   ├── member_mainpage.html
+│   ├── member_viewTasks.html
+│   ├── member_viewTask.html
+│   ├── member_addComment.html
+│   ├── member_notifications_and_deadlines.html
+│   ├── member_teamsIncluded.html
+│   ├── member_viewTeam.html
+│   ├── signup and login forms (for all roles)
+│   └── other helper templates
 │
 ├── utils/
-│   └── file_utils.py                     # File type validation and upload handling
+│   └── file_utils.py                     # File validation and upload handling
 │
-└── venv/                                 # Python virtual environment
+└── venv/                                 # Virtual environment (optional)
 ```
 
-
-## Project Directory Overview
-**routes/**          – All Flask route blueprints  
-**templates/**       – Jinja2 HTML templates  
-**static/**          – CSS, JavaScript, and uploads  
-**backend_server_app.py** – Entry point for the Flask app  
-**db.py**            – Database connection setup  
-**config.py**        – Environment and app configuration 
-
-
-## Post on Github
-```bash
-cd /path/to/your/project                  # Make sure you’re inside the root of your project
-git status                                # See what has changed
-git add .                                 # This stages everything in the project
-git commit -m "Add full project with routes, database, and README updates" # Set a comment for the updated version
-git pull origin main --rebase             # This ensures the local branch is up to date before pushing
-git push origin main                      # Now push the full project
-```
-
-
+---
 
 ## Database Schema
 
-Run the SQL script create_tables.sql before launching the app.
+The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
 
-Example:
-psql -U postgres -d project_db -f create_tables.sql
+| Table            | Description                                               |
+| ---------------- | --------------------------------------------------------- |
+| **users**        | Stores all system users (admins, leaders, members)        |
+| **teams**        | Represents team entities with assigned leaders            |
+| **team_members** | Many-to-many relationship between teams and users         |
+| **tasks**        | Represents team tasks with priority, status, and due date |
+| **comments**     | Stores user comments per task (with timestamps)           |
 
-Main tables:
-- users
-- teams
-- team_members
-- tasks
-- comments
+To initialize the database:
 
-## Installation and Setup
+```bash
+psql -U postgres -d project_db -f databe_sql/create_tables.sql
+```
 
-1. Clone the Repository
-   git clone https://github.com/stamatis-mavitzis/project-management-system.git
-   cd project-management-system
+---
 
-2. Create Virtual Environment
-   python3 -m venv venv
-   source venv/bin/activate   # Linux or macOS
-   venv\Scripts\activate      # Windows
+## Configuration
 
-3. Install Dependencies
-   pip install -r requirements.txt
+File: `config.py`
 
-4. Database Configuration
-   Edit the file config.py and update your PostgreSQL credentials:
-   DB_CONFIG = {
-       "dbname": "project_db",
-       "user": "postgres",
-       "password": "your_password",
-       "host": "localhost",
-       "port": "5432"
-   }
+```python
+DB_CONFIG = {
+    "host": "localhost",
+    "database": "project_db",
+    "user": "postgres",
+    "password": "your_password"
+}
 
-5. Initialize the Database
-   psql -U postgres -d project_db -f create_tables.sql
+SECRET_KEY = "supersecretkey"
+UPLOAD_FOLDER = "static/uploads"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf"}
+```
 
-6. Make the source_run_flask.sh executable
-   chmod +x source_run_flask.sh
+---
 
-7. Run the Application
-   source source_run_flask.sh
+## Installation & Execution
 
-8. Access the app at http://127.0.0.1:5000/
+### 1. Clone the Repository
 
-## Required Libraries
+```bash
+git clone https://github.com/stamatis-mavitzis/project-management-system.git
+cd project-management-system
+```
 
-List of dependencies (defined in requirements.txt):
+### 2. Set Up Virtual Environment
 
-Flask
-psycopg2-binary
-python-dotenv
-Werkzeug
-Jinja2
+```bash
+python3 -m venv venv
+source venv/bin/activate   # Linux/macOS
+venv\Scripts\activate      # Windows
+```
 
-Install with:
+### 3. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-## User Roles Overview
+### 4. Configure Database
 
-   Role     | Permissions
-------------|-----------------------------------------------
-Admin       | Manage users, teams, and roles
-Team Leader | Manage teams, assign tasks, comment on tasks
-Team Member | View assigned tasks, comment on tasks
+Update credentials in `config.py` and create the database schema:
 
-## Usage Guide
+```bash
+psql -U postgres -d project_db -f databe_sql/create_tables.sql
+```
 
-1. Start the Flask app.
-2. Open the home page / and select your role (Admin, Team Leader, or Member).
-3. Admins can:
-   - Approve or deactivate users
-   - Create teams and assign leaders
-4. Team Leaders can:
-   - Manage teams and members
-   - Create, assign, and edit tasks
-5. Members can:
-   - View assigned tasks
-   - Add comments
+### 5. Run Flask Application
 
-## Folder Explanation
+```bash
+source source_run_flash.sh
+# or manually:
+python3 backend_server_app.py
+```
 
-Folder/File       | Description
-------------------|-------------
-/static/css       | CSS stylesheets
-/static/script    | JavaScript files
-/templates        | Jinja2 HTML templates
-db.py             | Database connection functions
-config.py         | App configuration settings
-admin_*.py        | Admin-related functionality
-teamLeader_*.py   | Team Leader functionality
-member_*.py       | Member functionality
-homepage.py       | Homepage and role routing
+### 6. Access Application
 
-## Optional: Docker Setup
+Open your browser at:
 
-You can containerize the application using Docker.
+```
+http://127.0.0.1:5000/
+```
 
-Example Dockerfile:
+---
+
+## Role Functionality Summary
+
+| Role            | Capabilities                                                |
+| --------------- | ----------------------------------------------------------- |
+| **Admin**       | Manage users, teams, and roles; view all projects and tasks |
+| **Team Leader** | Manage teams, create tasks, edit tasks, add comments        |
+| **Team Member** | View assigned tasks, change task status, comment            |
+
+---
+
+## Tech Stack
+
+| Layer             | Technology                               |
+| ----------------- | ---------------------------------------- |
+| **Backend**       | Python 3, Flask                          |
+| **Database**      | PostgreSQL                               |
+| **Frontend**      | HTML, CSS, JavaScript, Jinja2            |
+| **Hosting Ready** | Docker-compatible structure              |
+| **Libraries**     | Flask, psycopg2-binary, Werkzeug, Jinja2 |
+
+---
+
+## Development and Deployment
+
+### Local Development
+
+Run all Flask services through `source_run_flash.sh` for quick setup.
+
+### Docker Deployment (optional)
+
+```dockerfile
 FROM python:3.12-slim
 WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt
 EXPOSE 5000
 CMD ["flask", "run", "--host=0.0.0.0"]
+```
 
-Build and run:
+Run:
+
+```bash
 docker build -t pms-app .
 docker run -p 5000:5000 pms-app
+```
 
-## Docker Build
-docker compose up --build
+---
 
-## Authors
+## Author
 
-Stamatios Mavitzis
-2018030040 
+**Stamatios Mavitzis**
+Student ID: *2018030040*
+Course: *ΠΛΗ513 – Υπηρεσίες στο Υπολογιστικό Νέφος και την Ομίχλη*
+Technical University of Crete
 
-For course ΠΛΗ513 – Υπηρεσίες στο Υπολογιστικό Νέφος και την Ομίχλη
+---
 
 ## License
 
-This project is open-source and provided for educational purposes.
+This project is open-source and distributed for **educational and academic use** only.

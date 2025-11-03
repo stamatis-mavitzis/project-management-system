@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template, redirect, url_for, flash, session # type: ignore
-from psycopg2.extras import RealDictCursor # type: ignore
-from werkzeug.utils import secure_filename # type: ignore
+from flask import Flask, request, render_template, redirect, url_for, flash, session  # type: ignore
+from psycopg2.extras import RealDictCursor  # type: ignore
+from werkzeug.utils import secure_filename  # type: ignore
+from datetime import datetime
 
 # Import Config and Database Connection
 from config import SECRET_KEY, UPLOAD_FOLDER
@@ -22,7 +23,22 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Register blueprints
+# ✅ Add global date formatting filter before app runs
+@app.template_filter('format_date')
+def format_date(value):
+    """Formats a datetime/date value as dd/mm/yyyy."""
+    if not value:
+        return "—"
+    try:
+        if isinstance(value, str):
+            value = datetime.fromisoformat(value)
+        return value.strftime("%d/%m/%Y")
+    except Exception:
+        return str(value)
+
+# ---------------------------------------------
+# --- Register Blueprints ---
+# ---------------------------------------------
 app.register_blueprint(homepage_bp)
 app.register_blueprint(admin_teamLeader_member_options_bp)
 app.register_blueprint(admin_authenticate_bp)
@@ -33,9 +49,9 @@ app.register_blueprint(teamLeader_mainpage_bp)
 app.register_blueprint(member_mainpage_bp)
 
 
-# ---------------------------------------------
+# --------------------------------------------------
 # --- Fix for old template endpoints (no prefix) ---
-# ---------------------------------------------
+# --------------------------------------------------
 def add_aliases(app):
     """
     Re-registers blueprint routes under old endpoint names
@@ -46,8 +62,8 @@ def add_aliases(app):
             short_endpoint = rule.endpoint.split("admin.", 1)[1]
             if short_endpoint not in app.view_functions:
                 app.add_url_rule(
-                    rule.rule,                   # same path (e.g. /add-to-cart/<product_id>)
-                    endpoint=short_endpoint,     # old endpoint name (e.g. add_to_cart)
+                    rule.rule,
+                    endpoint=short_endpoint,
                     view_func=app.view_functions[rule.endpoint],
                     methods=rule.methods
                 )
@@ -55,8 +71,8 @@ def add_aliases(app):
             short_endpoint = rule.endpoint.split("teamLeader.", 1)[1]
             if short_endpoint not in app.view_functions:
                 app.add_url_rule(
-                    rule.rule,                   # same path (e.g. /add-to-cart/<product_id>)
-                    endpoint=short_endpoint,     # old endpoint name (e.g. add_to_cart)
+                    rule.rule,
+                    endpoint=short_endpoint,
                     view_func=app.view_functions[rule.endpoint],
                     methods=rule.methods
                 )
@@ -64,12 +80,13 @@ def add_aliases(app):
             short_endpoint = rule.endpoint.split("member.", 1)[1]
             if short_endpoint not in app.view_functions:
                 app.add_url_rule(
-                    rule.rule,                   # same path (e.g. /add-to-cart/<product_id>)
-                    endpoint=short_endpoint,     # old endpoint name (e.g. add_to_cart)
+                    rule.rule,
+                    endpoint=short_endpoint,
                     view_func=app.view_functions[rule.endpoint],
                     methods=rule.methods
                 )
-    print(" Old client endpoints successfully restored.")
+    print("✅ Old client endpoints successfully restored.")
+
 
 # Run this after all blueprints are registered
 add_aliases(app)
