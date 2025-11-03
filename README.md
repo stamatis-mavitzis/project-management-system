@@ -16,69 +16,71 @@ The system supports multiple user roles — Admin, Team Leader, and Team Member 
 
 ## Project Structure
 
+```
 Project/
 │
-├── backend_server_app.py # Flask application entry point
-├── config.py # Configuration (database credentials, upload paths)
-├── db.py # PostgreSQL connection handler
-├── README.md # Project documentation
-├── source_run_flash.sh # Shell script to run Flask
-├── requirements.txt # Required Python libraries
+├── backend_server_app.py                 # Flask application entry point
+├── config.py                             # Configuration (database credentials, upload paths)
+├── db.py                                 # PostgreSQL connection handler
+├── README.md                             # Project documentation
+├── source_run_flash.sh                   # Shell script to run Flask
+├── requirements.txt                      # Required Python libraries
 │
 ├── databe_sql/
-│ ├── create_tables.sql # SQL script for schema and initial data
-│ └── database.db # Database file (if exported)
+│   ├── create_tables.sql                 # SQL script for schema and initial data
+│   └── database.db                       # Database file (if exported)
 │
-├── routes/ # Flask Blueprints (modular route structure)
-│ ├── admin_authenticate.py # Admin authentication logic
-│ ├── admin_mainpage.py # Admin dashboard & user/team management
-│ ├── admin_teamLeader_member_options.py # Role selection page
-│ ├── homepage.py # Home page route
-│ ├── member_authenticate.py # Member authentication
-│ ├── member_mainpage.py # Member dashboard, tasks, and comments
-│ ├── teamLeader_authenticate.py # Team Leader authentication
-│ └── teamLeader_mainpage.py # Team Leader dashboard and task management
+├── routes/                               # Flask Blueprints (modular route structure)
+│   ├── admin_authenticate.py             # Admin authentication logic
+│   ├── admin_mainpage.py                 # Admin dashboard & user/team management
+│   ├── admin_teamLeader_member_options.py# Role selection page
+│   ├── homepage.py                       # Home page route
+│   ├── member_authenticate.py            # Member authentication
+│   ├── member_mainpage.py                # Member dashboard, tasks, and comments
+│   ├── teamLeader_authenticate.py        # Team Leader authentication
+│   └── teamLeader_mainpage.py            # Team Leader dashboard and task management
 │
-├── static/ # Static assets: styles, scripts, uploads
-│ ├── css/
-│ │ ├── style.css
-│ │ └── style2.css
-│ ├── script/
-│ │ └── script.js
-│ └── uploads/ # User-uploaded files
+├── static/                               # Static assets: styles, scripts, uploads
+│   ├── css/
+│   │   ├── style.css
+│   │   └── style2.css
+│   ├── script/
+│   │   └── script.js
+│   └── uploads/                          # User-uploaded files
 │
-├── templates/ # HTML templates (Jinja2)
-│ ├── admin_login.html
-│ ├── admin_mainpage.html
-│ ├── admin_manageTeams.html
-│ ├── admin_manageUsers.html
-│ ├── admin_or_teamLeader_or_member.html
-│ ├── admin_show_tasks_and_projects.html
-│ ├── index.html
-│ ├── member_addComment.html
-│ ├── member_login.html
-│ ├── member_mainpage.html
-│ ├── member_notifications_and_deadlines.html
-│ ├── member_signin_or_login.html
-│ ├── member_signup.html
-│ ├── member_teamsIncluded.html
-│ ├── member_viewTask.html
-│ ├── member_viewTasks.html
-│ ├── member_viewTeam.html
-│ ├── teamLeader_editTask.html
-│ ├── teamLeader_login.html
-│ ├── teamLeader_mainpage.html
-│ ├── teamLeader_manageTasksProjects.html
-│ ├── teamLeader_manageTeams.html
-│ ├── teamLeader_signin_or_login.html
-│ ├── teamLeader_signup.html
-│ ├── teamLeader_teamDetails.html
-│ └── teamLeader_viewTask.html
+├── templates/                            # HTML templates (Jinja2)
+│   ├── admin_login.html
+│   ├── admin_mainpage.html
+│   ├── admin_manageTeams.html
+│   ├── admin_manageUsers.html
+│   ├── admin_or_teamLeader_or_member.html
+│   ├── admin_show_tasks_and_projects.html
+│   ├── index.html
+│   ├── member_addComment.html
+│   ├── member_login.html
+│   ├── member_mainpage.html
+│   ├── member_notifications_and_deadlines.html
+│   ├── member_signin_or_login.html
+│   ├── member_signup.html
+│   ├── member_teamsIncluded.html
+│   ├── member_viewTask.html
+│   ├── member_viewTasks.html
+│   ├── member_viewTeam.html
+│   ├── teamLeader_editTask.html
+│   ├── teamLeader_login.html
+│   ├── teamLeader_mainpage.html
+│   ├── teamLeader_manageTasksProjects.html
+│   ├── teamLeader_manageTeams.html
+│   ├── teamLeader_signin_or_login.html
+│   ├── teamLeader_signup.html
+│   ├── teamLeader_teamDetails.html
+│   └── teamLeader_viewTask.html
 │
 ├── utils/
-│ └── file_utils.py # File type validation and upload handling
+│   └── file_utils.py                     # File type validation and upload handling
 │
-└── venv/ # Python virtual environment
+└── venv/                                 # Python virtual environment
+```
 
 
 ## Project Directory Overview
