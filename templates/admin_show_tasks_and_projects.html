@@ -9,41 +9,47 @@
 <body>
   <h1>All Projects and Tasks</h1>
 
-<h2>Projects</h2>
-<table border="1">
-  <tr>
-    <th>Team Name</th>
-    <th>Leader</th>
-    <th>Description</th>
-    <th>Created At</th>
-  </tr>
-  {% for project in projects %}
-  <tr>
-    <td>{{ project.team_name }}</td>
-    <td>{{ project.leader_name or '—' }}</td>
-    <td>{{ project.description }}</td>
-    <td>{{ project.created_at | format_date }}</td>
-  </tr>
-  {% endfor %}
-</table>
+  <h2>Projects</h2>
+  <table border="1">
+    <tr>
+      <th>Team Name</th>
+      <th>Leader</th>
+      <th>Description</th>
+      <th>Created At</th>
+    </tr>
+    {% for project in projects %}
+    <tr>
+      <td>{{ project.team_name }}</td>
+      <td>{{ project.leader_name or '—' }}</td>
+      <td>{{ project.description }}</td>
+      <td>{{ project.created_at | format_date }}</td>
+    </tr>
+    {% endfor %}
+  </table>
 
 
   <h2>Tasks</h2>
   <table border="1">
     <tr>
       <th>Title</th>
-      <th>Assigned To</th>
+      <th>Description</th>
       <th>Status</th>
-      <th>Due Date</th>
       <th>Priority</th>
+      <th>Due Date</th>
+      <th>Assigned To</th>
+      <th>Assigned By (Leader)</th>
+      <th>Team</th>
     </tr>
     {% for task in tasks %}
     <tr>
       <td>{{ task.title }}</td>
-      <td>{{ task.assigned_to }}</td>
+      <td>{{ task.description }}</td>
       <td>{{ task.status }}</td>
-      <td>{{ task.due_date | format_date }}</td>
       <td>{{ task.priority }}</td>
+      <td>{{ task.due_date | format_date }}</td>
+      <td>{{ task.assigned_to }}</td>
+      <td>{{ task.assigned_by }}</td>
+      <td>{{ task.team_name }}</td>
     </tr>
     {% endfor %}
   </table>

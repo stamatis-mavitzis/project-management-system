@@ -201,36 +201,48 @@ def admin_show_tasks_and_projects():
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # ✅ Get all teams and their leaders
+    # ✅ Get all projects (teams)
     cur.execute("""
         SELECT 
             t.team_id,
             t.name AS team_name,
-            u.username AS leader_name,
             t.description,
-            t.created_at
+            t.created_at,
+            u.username AS leader_name
         FROM teams t
         LEFT JOIN users u ON t.leader_id = u.user_id
         ORDER BY t.created_at DESC;
     """)
     projects = cur.fetchall()
 
-    # ✅ Get all tasks with assigned users
+    # ✅ Get all tasks including the leader who assigned them
     cur.execute("""
         SELECT 
-            t.title,
-            u.username AS assigned_to,
-            t.status,
-            t.due_date,
-            t.priority
-        FROM tasks t
-        LEFT JOIN users u ON t.assigned_to = u.user_id
-        ORDER BY t.created_at DESC;
+            ta.task_id,
+            ta.title,
+            ta.description,
+            ta.status,
+            ta.priority,
+            ta.due_date,
+            ta.created_at,
+            assignee.username AS assigned_to,
+            leader.username AS assigned_by,
+            tm.name AS team_name
+        FROM tasks ta
+        LEFT JOIN users assignee ON ta.assigned_to = assignee.user_id
+        LEFT JOIN users leader ON ta.created_by = leader.user_id
+        LEFT JOIN teams tm ON ta.team_id = tm.team_id
+        ORDER BY ta.created_at DESC;
     """)
     tasks = cur.fetchall()
 
     cur.close()
     conn.close()
 
-    return render_template("admin_show_tasks_and_projects.html", projects=projects, tasks=tasks)
+    return render_template(
+        "admin_show_tasks_and_projects.html",
+        projects=projects,
+        tasks=tasks
+    )
+
 
