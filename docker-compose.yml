@@ -1,31 +1,39 @@
-version: "3.9"
-
 services:
-  web:
-    build: .
-    container_name: flask_app
-    ports:
-      - "5000:5000"
-    volumes:
-      - .:/app                # ✅ Mount για live αλλαγές
-    environment:
-      - FLASK_ENV=development # ενεργοποιεί auto-reload
-      - PYTHONUNBUFFERED=1
-    depends_on:
-      - db
-
   db:
-    image: postgres:15
-    container_name: postgres_db
-    restart: always
+    image: postgres:16
+    container_name: project_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: xotour
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+      - ./database_sql/create_tables.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: project_app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=backend_server_app.py
+      - FLASK_ENV=development
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=xotour
+      - DB_NAME=postgres
+    command: flask run --host=0.0.0.0 --port=5000
 
 volumes:
-  postgres_data:
+  pgdata:

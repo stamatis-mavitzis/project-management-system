@@ -9,8 +9,8 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
 
 # Database Configuration
 DB_CONFIG = {
-    "host": "localhost",
-    "database": "postgres",
-    "user": "postgres",
-    "password": "xotour"
+    "host": os.getenv("DB_HOST", "localhost"),
+    "database": os.getenv("DB_NAME", "postgres"),
+    "user": os.getenv("DB_USER", "postgres"),
+    "password": os.getenv("DB_PASSWORD", "xotour")
 }

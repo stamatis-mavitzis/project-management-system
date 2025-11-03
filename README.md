@@ -73,6 +73,14 @@ Project/
 | -- venv/                    # Python virtual environment
 
 
+## Project Directory Overview
+**routes/**          – All Flask route blueprints  
+**templates/**       – Jinja2 HTML templates  
+**static/**          – CSS, JavaScript, and uploads  
+**backend_server_app.py** – Entry point for the Flask app  
+**db.py**            – Database connection setup  
+**config.py**        – Environment and app configuration 
+
 
 ## Database Schema
 
@@ -87,7 +95,6 @@ Main tables:
 - team_members
 - tasks
 - comments
-- attachments
 
 ## Installation and Setup
 
@@ -188,6 +195,9 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 Build and run:
 docker build -t pms-app .
 docker run -p 5000:5000 pms-app
+
+## Docker Build
+docker compose up --build
 
 ## Authors
 

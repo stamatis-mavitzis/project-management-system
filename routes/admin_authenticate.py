@@ -2,8 +2,8 @@
 # --- Admin Authentication Blueprint ---
 # ---------------------------------------------
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session # type: ignore
-from psycopg2.extras import RealDictCursor # type: ignore
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session  # type: ignore
+from psycopg2.extras import RealDictCursor  # type: ignore
 from db import get_db_connection
 
 admin_authenticate_bp = Blueprint("admin_authenticate_bp", __name__)
@@ -27,12 +27,16 @@ def admin_signup():
 
         cur = conn.cursor(cursor_factory=RealDictCursor)
         try:
+            # Create admin with INACTIVE status (awaiting activation)
             cur.execute("""
                 INSERT INTO users (username, email, password, name, surname, role, status)
-                VALUES (%s, %s, %s, %s, %s, 'ADMIN', 'ACTIVE')
+                VALUES (%s, %s, %s, %s, %s, 'ADMIN', 'INACTIVE')
+                RETURNING email;
             """, (username, email, password, name, surname))
+            new_admin = cur.fetchone()
             conn.commit()
-            flash("✅ Admin created successfully!", "success")
+
+            flash(f"✅ Admin account created successfully for {new_admin['email']}! Awaiting admin activation.", "success")
             return redirect(url_for("admin_authenticate_bp.admin_login"))
         except Exception as e:
             conn.rollback()
@@ -50,32 +54,49 @@ def admin_signup():
 # ---------------------------------------------
 @admin_authenticate_bp.route("/admin-login", methods=["GET", "POST"])
 def admin_login():
+    """Handles admin login."""
     if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         conn = get_db_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        try:
+            cur.execute("""
+                SELECT user_id, username, email, password, status
+                FROM users
+                WHERE email = %s AND role = 'ADMIN';
+            """, (email,))
+            admin = cur.fetchone()
 
-        cur.execute("""
-            SELECT * FROM users 
-            WHERE email = %s AND password = %s AND role = 'ADMIN'
-        """, (email, password))
-        admin = cur.fetchone()
+            if not admin:
+                flash("❌ No admin account found with that email.", "error")
+                return redirect(url_for("admin_authenticate_bp.admin_login"))
 
-        cur.close()
-        conn.close()
+            if admin["password"] != password:
+                flash("❌ Incorrect password.", "error")
+                return redirect(url_for("admin_authenticate_bp.admin_login"))
 
-        if admin:
-            session["admin_id"] = admin[0]
-            session["admin_email"] = email  # Add this line
-            flash("Admin login successful!", "success")
+            if admin["status"] != "ACTIVE":
+                flash("⚠️ Account not active yet. Please wait for admin approval.", "warning")
+                return redirect(url_for("admin_authenticate_bp.admin_login"))
+
+            # ✅ Login successful
+            session["admin_id"] = admin["user_id"]
+            session["admin_email"] = admin["email"]
+            session["admin_username"] = admin["username"]
+
+            flash("✅ Admin login successful!", "success")
             return redirect("/admin-mainpage")
-        else:
-            flash("Invalid email or password.", "danger")
+
+        except Exception as e:
+            flash(f"❌ Error during login: {e}", "error")
+            return redirect(url_for("admin_authenticate_bp.admin_login"))
+        finally:
+            cur.close()
+            conn.close()
 
     return render_template("admin_login.html")
-
 
 
 # ---------------------------------------------

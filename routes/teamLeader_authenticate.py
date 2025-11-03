@@ -27,17 +27,20 @@ def teamLeader_signup():
 
         cur = conn.cursor(cursor_factory=RealDictCursor)
         try:
-            # Insert the new team leader
+            # Create leader with INACTIVE status (awaiting admin activation)
             cur.execute("""
                 INSERT INTO users (username, email, password, name, surname, role, status)
-                VALUES (%s, %s, %s, %s, %s, 'TEAM_LEADER', 'ACTIVE')
+                VALUES (%s, %s, %s, %s, %s, 'TEAM_LEADER', 'INACTIVE')
+                RETURNING user_id, email;
             """, (username, email, password, name, surname))
+
+            new_leader = cur.fetchone()
             conn.commit()
 
-            # No fetchone() needed — just use the form email
-            session["teamLeader_email"] = email
-            flash(f"✅ Team Leader account created successfully for {email}!", "success")
-            return redirect("/teamLeader-mainpage")
+            session["teamLeader_id"] = new_leader["user_id"]
+            session["teamLeader_email"] = new_leader["email"]
+            flash(f"✅ Team Leader account created successfully for {new_leader['email']}! Awaiting admin activation.", "success")
+            return redirect(url_for("teamLeader_authenticate_bp.teamLeader_login"))
 
         except Exception as e:
             conn.rollback()
@@ -50,35 +53,55 @@ def teamLeader_signup():
     return render_template("teamLeader_signup.html")
 
 
-
 # ---------------------------------------------
 # --- Team Leader Login ---
 # ---------------------------------------------
 @teamLeader_authenticate_bp.route("/teamLeader-login", methods=["GET", "POST"])
 def teamLeader_login():
+    """Handles team leader login."""
     if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         conn = get_db_connection()
-        cur = conn.cursor()
+        if isinstance(conn, str):
+            return f"❌ Database connection failed: {conn}"
 
-        cur.execute("""
-            SELECT * FROM users 
-            WHERE email = %s AND password = %s AND role = 'TEAM_LEADER'
-        """, (email, password))
-        leader = cur.fetchone()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        try:
+            cur.execute("""
+                SELECT user_id, username, email, password, status
+                FROM users
+                WHERE email = %s AND role = 'TEAM_LEADER';
+            """, (email,))
+            leader = cur.fetchone()
 
-        cur.close()
-        conn.close()
+            if not leader:
+                flash("❌ No Team Leader account found with that email.", "error")
+                return redirect(url_for("teamLeader_authenticate_bp.teamLeader_login"))
 
-        if leader:
-            session["teamLeader_id"] = leader[0]
-            session["teamLeader_email"] = email
-            flash("Team Leader login successful!", "success")
+            if leader["password"] != password:
+                flash("❌ Incorrect password.", "error")
+                return redirect(url_for("teamLeader_authenticate_bp.teamLeader_login"))
+
+            if leader["status"] != "ACTIVE":
+                flash("⚠️ Account not active yet. Please wait for admin approval.", "warning")
+                return redirect(url_for("teamLeader_authenticate_bp.teamLeader_login"))
+
+            # ✅ Login successful
+            session["teamLeader_id"] = leader["user_id"]
+            session["teamLeader_email"] = leader["email"]
+            session["teamLeader_username"] = leader["username"]
+
+            flash("✅ Team Leader login successful!", "success")
             return redirect("/teamLeader-mainpage")
-        else:
-            flash("Invalid email or password.", "danger")
+
+        except Exception as e:
+            flash(f"❌ Error during login: {e}", "error")
+            return redirect(url_for("teamLeader_authenticate_bp.teamLeader_login"))
+        finally:
+            cur.close()
+            conn.close()
 
     return render_template("teamLeader_login.html")
 

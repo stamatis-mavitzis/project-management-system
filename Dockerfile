@@ -1,22 +1,12 @@
-# Use Python base image
 FROM python:3.12-slim
 
-# Set working directory
 WORKDIR /app
+COPY . /app
 
-# Copy files
-COPY app/ /app
-COPY requirements.txt .
+RUN apt-get update && apt-get install -y netcat-traditional && \
+    pip install --no-cache-dir flask psycopg2-binary && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Expose Flask port
 EXPOSE 5000
 
-# Set environment variables
-ENV FLASK_APP=homepage.py
-ENV FLASK_RUN_HOST=0.0.0.0
-
-# Run Flask
-CMD ["flask", "run"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
