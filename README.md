@@ -84,14 +84,13 @@ Project/
 
 
 ## Project Directory Overview
-```
 **routes/**          – All Flask route blueprints  
 **templates/**       – Jinja2 HTML templates  
 **static/**          – CSS, JavaScript, and uploads  
 **backend_server_app.py** – Entry point for the Flask app  
 **db.py**            – Database connection setup  
 **config.py**        – Environment and app configuration 
-```
+
 
 ## Post on Github
 ```bash
