@@ -5,11 +5,13 @@
   <title>Member Signup</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/member.css') }}">
   <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 </head>
 <body>
   <h1>Member Signup</h1>
 
+  <!-- Flash messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul>
@@ -20,26 +22,29 @@
     {% endif %}
   {% endwith %}
 
-  <form id="signupForm" method="POST" action="{{ url_for('member_authenticate_bp.member_signup') }}">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required><br><br>
+  <div class="signup-box">
+    <form action="{{ url_for('member_authenticate_bp.member_signup') }}" method="post">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
 
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
 
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+      <label for="first_name">First Name</label>
+      <input type="text" id="first_name" name="first_name" required>
 
-    <label for="surname">Surname:</label><br>
-    <input type="text" id="surname" name="surname" required><br><br>
+      <label for="last_name">Last Name</label>
+      <input type="text" id="last_name" name="last_name" required>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
 
-    <button id="", type="submit">Create Member Account</button>
-  </form>
+      <button type="submit">Sign Up</button>
+    </form>
 
-  <button onclick="window.location.href='/member-login';">Back to Login</button>
-  <button onclick="window.location.href='/';">Back to Home</button>
+    <p>Already have an account? 
+      <a href="{{ url_for('member_authenticate_bp.member_login') }}">Log in here</a>
+    </p>
+  </div>
 </body>
 </html>
