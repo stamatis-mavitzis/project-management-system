@@ -4,42 +4,45 @@
   <meta charset="UTF-8">
   <title>Team Leader Signup</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/teamLeader.css') }}">
 </head>
 <body>
-  <h1>Team Leader Signup</h1>
+  <div class="signup-container">
+    <h1>Team Leader Signup</h1>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul>
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-  <form id="signupForm" method="POST" action="{{ url_for('teamLeader_authenticate_bp.teamLeader_signup') }}">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required><br><br>
+    <form id="signupForm" method="POST" action="{{ url_for('teamLeader_authenticate_bp.teamLeader_signup') }}">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
 
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
 
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
 
-    <label for="surname">Surname:</label><br>
-    <input type="text" id="surname" name="surname" required><br><br>
+      <label for="surname">Surname</label>
+      <input type="text" id="surname" name="surname" required>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
 
-    <button type="submit">Sign Up as Team Leader</button>
-  </form>
+      <button type="submit">Sign Up as Team Leader</button>
+    </form>
 
-  <button onclick="window.location.href='/leader-login';">Back to Login</button>
-  <button onclick="window.location.href='/';">Back to Home</button>
+    <div class="footer-links">
+      <button class="secondary-btn" onclick="window.location.href='/teamLeader-login';">Back to Login</button>
+      <button class="secondary-btn" onclick="window.location.href='/';">Back to Home</button>
+    </div>
+  </div>
 </body>
 </html>
