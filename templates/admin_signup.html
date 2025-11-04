@@ -4,15 +4,16 @@
   <meta charset="UTF-8">
   <title>Admin Signup</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/authenticate.css') }}">
 </head>
 <body>
-  <div class="signup-container">
+  <div class="form-box">
     <h1>Admin Signup</h1>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <ul>
+        <ul class="flash-messages">
           {% for category, message in messages %}
             <li class="{{ category }}">{{ message }}</li>
           {% endfor %}
@@ -21,32 +22,15 @@
     {% endwith %}
 
     <form method="POST" action="{{ url_for('admin_authenticate_bp.admin_signup') }}">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" required>
-
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" placeholder="Enter your name" required>
-
-      <label for="surname">Surname</label>
-      <input type="text" id="surname" name="surname" placeholder="Enter your surname" required>
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" required>
-
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="text" name="name" placeholder="Name" required>
+      <input type="text" name="surname" placeholder="Surname" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Sign Up</button>
-
-      <div class="footer-links">
-        <button class="secondary-btn" type="button" onclick="window.location.href='/admin-login';">
-          Back to Login
-        </button>
-        <button class="secondary-btn" type="button" onclick="window.location.href='/';">
-          Back to Home
-        </button>
-      </div>
     </form>
+
+    <p>Already have an account? <a href="{{ url_for('admin_authenticate_bp.admin_login') }}">Login</a></p>
   </div>
 </body>
 </html>
