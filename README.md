@@ -90,7 +90,9 @@ Project/
 │   ├── css/
 │   │   ├── style.css
 │   │   ├── mainpage.css
-│   │   └── teamLeader.css
+│   │   ├── teamLeader.css
+│   │   ├── admin.css
+│   │   └── member.css 
 │   ├── script/
 │   │   └── script.js
 │   ├── images/
