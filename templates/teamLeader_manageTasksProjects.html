@@ -31,7 +31,7 @@
             <td>{{ task.description }}</td>
             <td>{{ task.status }}</td>
             <td>{{ task.priority }}</td>
-            <td>{{ task.due_date }}</td>
+            <td>{{ task.due_date | format_date}}</td>
             <td>{{ task.assigned_username }}</td>
         </tr>
         {% endfor %}

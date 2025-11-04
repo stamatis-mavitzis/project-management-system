@@ -21,7 +21,7 @@
   <p><strong>Created by:</strong> {{ task.created_by_username }}</p>
   <p><strong>Status:</strong> {{ task.status }}</p>
   <p><strong>Priority:</strong> {{ task.priority }}</p>
-  <p><strong>Due:</strong> {{ task.due_date.strftime("%Y-%m-%d") if task.due_date else "-" }}</p>
+  <p><strong>Due:</strong> {{ task.due_date | format_date if task.due_date else "-" }}</p>
   <p><strong>Description:</strong><br>{{ task.description }}</p>
 
   <h2>Comments</h2>
