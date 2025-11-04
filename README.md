@@ -89,7 +89,6 @@ Project/
 ├── static/                               # Static assets (CSS, JS, uploads, images)
 │   ├── css/
 │   │   ├── style.css
-│   │   ├── style2.css
 │   │   ├── mainpage.css
 │   │   └── teamLeader.css
 │   ├── script/
