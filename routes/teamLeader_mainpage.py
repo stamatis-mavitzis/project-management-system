@@ -266,6 +266,7 @@ def view_task(task_id):
                 t.status,
                 t.priority,
                 t.due_date,
+                t.team_id,  -- ✅ Add this line
                 cu.username AS created_by_username,
                 au.username AS assigned_to_username
             FROM tasks t
@@ -280,7 +281,7 @@ def view_task(task_id):
             return redirect(url_for("teamLeader_mainpage_bp.teamLeader_manage_teams"))
 
         # -------------------------------
-        # Λήψη σχολίων του task
+        # 💬 Λήψη σχολίων του task
         # -------------------------------
         cur.execute("""
             SELECT 
@@ -307,7 +308,9 @@ def view_task(task_id):
     if not task:
         return redirect(url_for("teamLeader_mainpage_bp.teamLeader_manage_teams"))
 
-    return render_template("teamLeader_viewTask.html", task=task, comments=comments)
+    # ✅ Pass team_id to template
+    return render_template("teamLeader_viewTask.html", task=task, comments=comments, team_id=task["team_id"])
+
 
 
 
