@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Client Main</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}">
   <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 </head>
 <body>
@@ -31,10 +31,12 @@
   {% endwith %}
 
   <!-- Buttons -->
-<button id="admin_redirect_manageUsers">Manage Users</button>
-<button id="admin_redirect_manageTeams">Manage Teams</button>
-<button id="admin_redirect_show_tasks_and_projects">Show Tasks and Projects</button>
-<button id="redirectButton_logout">Logout</button>
+   <div style="margin-top: 20px;">
+    <button id="admin_redirect_manageUsers">Manage Users</button>
+    <button id="admin_redirect_manageTeams">Manage Teams</button>
+    <button id="admin_redirect_show_tasks_and_projects">Show Tasks and Projects</button>
+    <button id="redirectButton_logout">Logout</button>
+   </div>
 </body>
 </html>
     

@@ -377,7 +377,9 @@ def delete_task(task_id):
 
 
 
-# ====================================================================================================
+# ---------------------------------------------
+# --- Manage Tasks & Projects (with Team Names) ---
+# ---------------------------------------------
 @teamLeader_mainpage_bp.route("/teamLeader-manageTasksProjects")
 def teamLeader_manage_tasks_projects():
     if "teamLeader_email" not in session:
@@ -390,7 +392,7 @@ def teamLeader_manage_tasks_projects():
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     # -------------------------------
-    # Βρίσκουμε το user_id του leader
+    # Get the user_id of the leader
     # -------------------------------
     cur.execute("SELECT user_id FROM users WHERE email = %s", (leader_email,))
     leader_row = cur.fetchone()
@@ -403,7 +405,7 @@ def teamLeader_manage_tasks_projects():
     leader_id = leader_row["user_id"]
 
     # -------------------------------
-    # Παίρνουμε όλες τις ομάδες του leader
+    # Get all teams of this leader
     # -------------------------------
     cur.execute("""
         SELECT team_id, name AS team_name, description
@@ -413,8 +415,8 @@ def teamLeader_manage_tasks_projects():
     teams = cur.fetchall()
 
     # -------------------------------
-    # Παίρνουμε όλα τα tasks των ομάδων του
-    # και κάνουμε JOIN με τους users για να εμφανιστεί το username
+    # Get all tasks of the leader’s teams
+    # Include assigned username and team name
     # -------------------------------
     cur.execute("""
         SELECT 
@@ -425,13 +427,12 @@ def teamLeader_manage_tasks_projects():
             t.due_date, 
             t.priority, 
             COALESCE(u.username, 'Unassigned') AS assigned_username,
-            t.team_id
+            tm.name AS team_name
         FROM tasks t
         LEFT JOIN users u ON t.assigned_to = u.user_id
-        WHERE t.team_id IN (
-            SELECT team_id FROM teams WHERE leader_id = %s
-        )
-        ORDER BY t.due_date ASC
+        LEFT JOIN teams tm ON t.team_id = tm.team_id
+        WHERE tm.leader_id = %s
+        ORDER BY tm.name ASC, t.due_date ASC;
     """, (leader_id,))
     tasks = cur.fetchall()
 

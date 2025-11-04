@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Member Main</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}">
   <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 </head>
 <body>
@@ -29,9 +29,11 @@
   {% endwith %}
 
   <!-- Buttons -->
-  <button id="member_redirect_teams_included">My Teams</button>
-  <button id="member_redirect_tasks">My Tasks</button>
-  <button id="member_redirect_notifications_and_deadlines">Notifications and Deadlines</button>
-  <button id="redirectButton_logout">Logout</button>
+  <div style="margin-top: 20px;">
+    <button id="member_redirect_teams_included">My Teams</button>
+    <button id="member_redirect_tasks">My Tasks</button>
+    <button id="member_redirect_notifications_and_deadlines">Notifications and Deadlines</button>
+    <button id="redirectButton_logout">Logout</button>
+  </div>
 </body>
 </html>

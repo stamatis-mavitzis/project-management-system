@@ -8,15 +8,21 @@
 </head>
 <body>
     <h1>Manage Tasks & Projects</h1>
+
     <h2>Teams</h2>
-    <ul>
+    <div class="teams-container">
         {% for team in teams %}
-            <li>{{ team.team_name }} - {{ team.description }}</li>
+            <div class="team-card">
+                <div class="team-name">{{ team.team_name }}</div>
+                <div class="team-description">{{ team.description }}</div>
+            </div>
+        {% else %}
+            <p>No teams found.</p>
         {% endfor %}
-    </ul>
+    </div>
 
     <h2>Tasks</h2>
-    <table border="1">
+    <table class="tasks-table">
         <tr>
             <th>Title</th>
             <th>Description</th>
@@ -24,6 +30,7 @@
             <th>Priority</th>
             <th>Due Date</th>
             <th>Assigned To</th>
+            <th>Team</th>
         </tr>
         {% for task in tasks %}
         <tr>
@@ -31,13 +38,21 @@
             <td>{{ task.description }}</td>
             <td>{{ task.status }}</td>
             <td>{{ task.priority }}</td>
-            <td>{{ task.due_date | format_date}}</td>
+            <td>{{ task.due_date | format_date }}</td>
             <td>{{ task.assigned_username }}</td>
+            <td>{{ task.team_name }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" style="text-align: center;">No tasks available.</td>
         </tr>
         {% endfor %}
     </table>
-    <form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_mainpage') }}" method="get">
-        <button type="submit">Back to Dashboard</button>
-    </form>
+
+    <div class="back-btn-container">
+        <form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_mainpage') }}" method="get">
+            <button type="submit">← Back to Dashboard</button>
+        </form>
+    </div>
 </body>
 </html>
