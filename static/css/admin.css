@@ -1,0 +1,211 @@
+/* =======================================================
+   Admin Pages – Consistent Style with Team Leader Design
+   ======================================================= */
+
+/* ---- Body & Background ---- */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #dce9ff, #f4f8ff);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* ---- Page Titles ---- */
+h1 {
+    color: #1b3b70;
+    font-size: 2.2em;
+    margin-bottom: 25px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* ---- Flash Messages ---- */
+ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    width: 320px;
+}
+
+li.success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 10px 15px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+}
+
+li.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+}
+
+/* ---- Auth Box (Signup/Login) ---- */
+.auth-box {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    width: 360px;
+    padding: 35px 40px;
+    text-align: center;
+    transition: all 0.25s ease-in-out;
+}
+
+.auth-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- Labels & Inputs ---- */
+label {
+    display: block;
+    text-align: left;
+    color: #2c3e50;
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccd6e0;
+    border-radius: 8px;
+    margin-top: 6px;
+    box-sizing: border-box;
+    font-size: 0.95em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #1a66ff;
+    box-shadow: 0 0 6px rgba(26, 102, 255, 0.2);
+    outline: none;
+}
+
+/* =======================================================
+   BUTTON STYLING
+   ======================================================= */
+
+/* -- Buttons inside .auth-box (signup/login) appear vertically -- */
+.auth-box button,
+.auth-box input[type="submit"] {
+    width: 100%;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #3f6df2, #1a66ff);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.auth-box button:hover,
+.auth-box input[type="submit"]:hover {
+    background: linear-gradient(135deg, #355cd8, #1257e0);
+    transform: translateY(-2px);
+}
+
+/* -- Buttons on all other admin pages appear side by side -- */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.button-group button,
+.button-group input[type="submit"] {
+    flex: 1;
+    background: linear-gradient(135deg, #3f6df2, #1a66ff);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.button-group button:hover,
+.button-group input[type="submit"]:hover {
+    background: linear-gradient(135deg, #355cd8, #1257e0);
+    transform: translateY(-2px);
+}
+
+/* ---- Links ---- */
+a {
+    color: #1a66ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ---- Tables and Cards (for admin dashboards) ---- */
+.table-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 25px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e6ee;
+    text-align: left;
+}
+
+th {
+    background-color: #eef3ff;
+    color: #1b3b70;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f7faff;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+    .auth-box {
+        width: 90%;
+        padding: 25px;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+}
