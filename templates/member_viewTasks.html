@@ -44,7 +44,7 @@
         <td>{{ task.description }}</td>
         <td>{{ task.status }}</td>
         <td>{{ task.priority }}</td>
-        <td>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '—' }}</td>
+        <td>{{ task.due_date | format_date if task.due_date else '—' }}</td>
         <td>{{ task.leader_name if task.leader_name else '—' }}</td>
         <td style="white-space: nowrap;">
 
@@ -78,7 +78,7 @@
 
   <br>
   <button id="redirectButton_member_mainpage">
-    ⬅ Back to My Teams
+    ⬅ Back to Mainpage
   </button>
 
 </body>

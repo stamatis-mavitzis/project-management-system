@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Notifications & Deadlines</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 </head>
 <body>
 
@@ -24,7 +25,7 @@
           <td>{{ c.task_title }}</td>
           <td>{{ c.content }}</td>
           <td>{{ c.author }}</td>
-          <td>{{ c.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+          <td>{{ c.created_at | format_date if c.created_at else '—' }}</td>
         </tr>
       {% endfor %}
     </table>
@@ -41,7 +42,7 @@
       {% for d in deadlines %}
         <tr>
           <td>{{ d.title }}</td>
-          <td>{{ d.due_date.strftime("%Y-%m-%d") }}</td>
+          <td>{{ d.due_date | format_date if d.due_date else '—' }}</td>
           <td>{{ d.status }}</td>
           <td>{{ d.priority }}</td>
         </tr>
@@ -52,9 +53,9 @@
   {% endif %}
 
   <br>
-  <form action="{{ url_for('member_mainpage_bp.member_view_tasks') }}" method="get">
-    <button type="submit">⬅ Back to My Tasks</button>
-  </form>
+  <button id="redirectButton_member_mainpage">
+    ⬅ Back to Mainpage
+  </button>
 
 </body>
 </html>

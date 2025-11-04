@@ -316,9 +316,9 @@ def member_change_status(task_id):
     return redirect(url_for("member_mainpage_bp.member_view_tasks"))
 
 
-
-
-
+# -------------------------------------------------
+# Notifications and Deadlines
+# -------------------------------------------------
 @member_mainpage_bp.route("/member-notifications_and_deadlines")
 def member_notifications_and_deadlines():
     if "member_email" not in session:
