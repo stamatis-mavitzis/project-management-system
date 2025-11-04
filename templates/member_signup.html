@@ -4,32 +4,28 @@
   <meta charset="UTF-8">
   <title>Member Signup</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/authenticate.css') }}">
 </head>
 <body>
-  <div class="form-box">
+  <div class="auth-container">
     <h1>Member Signup</h1>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <ul class="flash-messages">
+        <ul>
           {% for category, message in messages %}
             <li class="{{ category }}">{{ message }}</li>
           {% endfor %}
         </ul>
       {% endif %}
     {% endwith %}
-
     <form method="POST" action="{{ url_for('member_authenticate_bp.member_signup') }}">
-      <input type="text" name="username" placeholder="Username" required>
       <input type="text" name="name" placeholder="Name" required>
       <input type="text" name="surname" placeholder="Surname" required>
+      <input type="text" name="username" placeholder="Username" required>
       <input type="email" name="email" placeholder="Email" required>
       <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Sign Up</button>
     </form>
-
     <p>Already have an account? <a href="{{ url_for('member_authenticate_bp.member_login') }}">Login</a></p>
   </div>
 </body>

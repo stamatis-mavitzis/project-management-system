@@ -4,29 +4,25 @@
   <meta charset="UTF-8">
   <title>Admin Login</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/authenticate.css') }}">
 </head>
 <body>
-  <div class="form-box">
+  <div class="auth-container">
     <h1>Admin Login</h1>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <ul class="flash-messages">
+        <ul>
           {% for category, message in messages %}
             <li class="{{ category }}">{{ message }}</li>
           {% endfor %}
         </ul>
       {% endif %}
     {% endwith %}
-
     <form method="POST" action="{{ url_for('admin_authenticate_bp.admin_login') }}">
-      <input type="text" name="username" placeholder="Username" required>
+      <input type="email" name="email" placeholder="Email" required>
       <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
-
     <p>Don't have an account? <a href="{{ url_for('admin_authenticate_bp.admin_signup') }}">Sign Up</a></p>
   </div>
 </body>
