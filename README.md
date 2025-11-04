@@ -86,13 +86,17 @@ Project/
 │   ├── member_authenticate.py            # Member authentication routes
 │   └── member_mainpage.py                # Member dashboard and task management
 │
-├── static/                               # Static assets (CSS, JS, uploads)
+├── static/                               # Static assets (CSS, JS, uploads, images)
 │   ├── css/
 │   │   ├── style.css
-│   │   └── style2.css
+│   │   ├── style2.css
+│   │   ├── mainpage.css
+│   │   └── teamLeader.css
 │   ├── script/
 │   │   └── script.js
-│   └── uploads/                          # Uploaded user files
+│   ├── images/
+│   │   └── icon_pms.svg                  # Application favicon/icon
+│   └── uploads/                          # Uploaded user files                        # Uploaded user files
 │
 ├── templates/                            # HTML pages (Jinja2)
 │   ├── index.html                        # Homepage
