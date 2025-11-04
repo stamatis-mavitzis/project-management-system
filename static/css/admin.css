@@ -1,0 +1,139 @@
+/* =======================================================
+   Admin Signup & Login — EXACT COPY of TeamLeader Design
+   ======================================================= */
+
+/* ---- General Layout ---- */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* ---- Signup/Login Card ---- */
+.signup-container {
+  background: linear-gradient(145deg, #ffffff, #f3f6fa);
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 320px;
+  padding: 30px 35px;
+  text-align: left;
+}
+
+/* ---- Header ---- */
+h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* ---- Flash Messages ---- */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+li.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 5px;
+}
+
+li.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 5px;
+}
+
+/* ---- Labels ---- */
+label {
+  display: block;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* ---- Input Fields ---- */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* ---- Main Button ---- */
+button {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* ---- Footer Buttons ---- */
+.footer-links {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.secondary-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background-color: #5a6268;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+  .signup-container {
+    width: 85%;
+    padding: 25px;
+  }
+
+  button,
+  .secondary-btn {
+    font-size: 15px;
+    padding: 10px;
+  }
+}

@@ -4,44 +4,49 @@
   <meta charset="UTF-8">
   <title>Admin Signup</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
-  <h1>Admin Signup</h1>
+  <div class="signup-container">
+    <h1>Admin Signup</h1>
 
-  <!-- Flash messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul>
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-  <form id="signupForm" method="POST" action="{{ url_for('admin_authenticate_bp.admin_signup') }}">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required><br><br>
+    <form method="POST" action="{{ url_for('admin_authenticate_bp.admin_signup') }}">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
-    <label for="surname">Surname:</label><br>
-    <input type="text" id="surname" name="surname" required><br><br>
+      <label for="surname">Surname</label>
+      <input type="text" id="surname" name="surname" placeholder="Enter your surname" required>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-    <button id="", type="submit">Sign Up as Admin</button>
-  </form>
+      <button type="submit">Sign Up</button>
 
-
-  <button id="redirectButton_admin_login">Back to Login</button>
-  <button id="redirect_to_home">Back to Home</button>
+      <div class="footer-links">
+        <button class="secondary-btn" type="button" onclick="window.location.href='/admin-login';">
+          Back to Login
+        </button>
+        <button class="secondary-btn" type="button" onclick="window.location.href='/';">
+          Back to Home
+        </button>
+      </div>
+    </form>
+  </div>
 </body>
 </html>

@@ -4,34 +4,40 @@
   <meta charset="UTF-8">
   <title>Admin Login</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
-  <h1>Admin Login</h1>
+  <div class="signup-container">
+    <h1>Admin Login</h1>
 
-  <!-- Flash messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul>
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-  <!-- FORM -->
-  <form id="loginForm" method="POST" action="{{ url_for('admin_authenticate_bp.admin_login') }}">
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+    <form method="POST" action="{{ url_for('admin_authenticate_bp.admin_login') }}">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-    <button type="submit">Login as Admin</button>
-  </form>
+      <button type="submit">Login</button>
 
-  <button id="redirect_to_home">Back to Home</button>
+      <div class="footer-links">
+        <button class="secondary-btn" type="button" onclick="window.location.href='/admin-signup';">
+          Create Account
+        </button>
+        <button class="secondary-btn" type="button" onclick="window.location.href='/';">
+          Back to Home
+        </button>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
