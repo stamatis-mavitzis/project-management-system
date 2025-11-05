@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>View Task</title>
+  <title>Task Details</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/member.css') }}">
@@ -18,28 +18,44 @@
     {% endif %}
   {% endwith %}
 
-  <h1>{{ task.title }}</h1>
-  <p><strong>Team:</strong> {{ task.team_name or "-" }}</p>
-  <p><strong>Created by:</strong> {{ task.created_by_username }}</p>
-  <p><strong>Status:</strong> {{ task.status }}</p>
-  <p><strong>Priority:</strong> {{ task.priority }}</p>
-  <p><strong>Due:</strong> {{ task.due_date | format_date if task.due_date else "-" }}</p>
-  <p><strong>Description:</strong><br>{{ task.description }}</p>
+  <div class="task-container">
+    <h1>{{ task.title }}</h1>
 
-  <h2>Comments</h2>
-  {% if comments %}
-    <ul>
-      {% for c in comments %}
-      <li>
-        <strong>{{ c.username }}</strong> — {{ c.created_at | format_date }}<br>
-        {{ c.content }}
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No comments yet.</p>
-  {% endif %}
+    <div class="task-info">
+      <p><strong>🧩 Team:</strong> {{ task.team_name or "-" }}</p>
+      <p><strong>👤 Created by:</strong> {{ task.created_by_username }}</p>
+      <p><strong>📊 Status:</strong> <span class="status {{ task.status|lower }}">{{ task.status }}</span></p>
+      <p><strong>⚡ Priority:</strong> <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span></p>
+      <p><strong>⏰ Due:</strong> {{ task.due_date | format_date if task.due_date else "-" }}</p>
+    </div>
 
-  <a class="btn" href="{{ url_for('member_mainpage_bp.member_view_tasks') }}">⬅ Back to My Tasks</a>
+    <div class="task-description">
+      <h2>📝 Description</h2>
+      <p>{{ task.description }}</p>
+    </div>
+
+    <div class="comments-section">
+      <h2>💬 Comments</h2>
+      {% if comments %}
+        <ul class="comment-list">
+          {% for c in comments %}
+            <li class="comment-item">
+              <div class="comment-header">
+                <strong>{{ c.username }}</strong>
+                <span class="comment-date">{{ c.created_at | format_date }}</span>
+              </div>
+              <div class="comment-body">{{ c.content }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="no-comments">No comments yet.</p>
+      {% endif %}
+    </div>
+
+    <form action="{{ url_for('member_mainpage_bp.member_view_tasks') }}" method="get">
+      <button type="submit" class="btn-back">⬅ Back to My Tasks</button>
+    </form>
+  </div>
 </body>
 </html>

@@ -148,3 +148,136 @@ footer {
     text-align: center;
     font-size: 0.9em;
 }
+
+
+
+
+
+/* --- Task View Page Styling --- */
+.task-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 95%;
+    max-width: 700px;
+    margin: 50px auto;
+    line-height: 1.6;
+    color: #333;
+}
+
+.task-container h1 {
+    color: #1a73e8;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.task-info p {
+    font-size: 1rem;
+    margin: 6px 0;
+}
+
+.task-info strong {
+    color: #2c3e50;
+}
+
+/* --- Status & Priority Tags --- */
+.status,
+.priority {
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.status.todo { background-color: #f39c12; }
+.status.in_progress { background-color: #3498db; }
+.status.done { background-color: #2ecc71; }
+
+.priority.low { background-color: #27ae60; }
+.priority.medium { background-color: #f1c40f; color: #000; }
+.priority.high { background-color: #e74c3c; }
+
+/* --- Description Section --- */
+.task-description {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.task-description h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #1a73e8;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+/* --- Comments Section --- */
+.comments-section {
+    margin-top: 35px;
+    text-align: left;
+}
+
+.comments-section h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #1a73e8;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comment-item {
+    background: #f8f9fa;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+}
+
+.comment-item:hover {
+    transform: scale(1.01);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.comment-date {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.comment-body {
+    font-size: 1rem;
+    color: #333;
+}
+
+.no-comments {
+    font-style: italic;
+    color: #888;
+}
+
+/* --- Back Button --- */
+.btn-back {
+    display: inline-block;
+    margin-top: 25px;
+    background-color: #1a73e8;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #0f5ad6;
+    transform: translateY(-2px);
+}
