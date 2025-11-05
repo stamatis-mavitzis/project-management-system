@@ -89,7 +89,7 @@ Project/
 ├── source_run_flash.sh                   # Shell script to start the Flask server
 │
 ├── database_sql/                         # Database schema and setup files
-│   ├── create_tables.sql                 # SQL script for creating tables and inserting initial data
+│   ├── create_tables.sh                  # Bash script for creating tables and inserting initial data
 │   └── database.db                       # SQLite or PostgreSQL export (sample database)
 │
 ├── routes/                               # Flask Blueprints (Microservices logic)
@@ -155,7 +155,7 @@ Project/
     ├── bin/                              # Executables and activation scripts
     ├── Lib/                              # Installed Python packages (Flask, psycopg2, etc.)
     ├── Include/                          # C headers for installed modules
-    └── pyvenv.cfg                        # Virtual environment configuration file                              # Virtual environment (optional)
+    └── pyvenv.cfg                        # Virtual environment configuration 
 ```
 
 ---
@@ -483,84 +483,119 @@ This project is open-source and distributed for educational and academic use onl
 
 ---
 
-## Database Recreation Script
 
-This project provides an automated script to **recreate the PostgreSQL database** (schema + data) from the exported SQL dump (`database.sql`).
 
-### 🔧 Script: `recreate_database.sh`
+## PostgreSQL Server Setup
+
+This section explains how to create and initialize the local PostgreSQL server and database for the Project Management System (ΠΛΗ513).
+
+It uses the helper script `create_tables.sh` to automatically install, configure, and import your database.
+
+---
+
+### Requirements
+
+- Operating System: Ubuntu 22.04 or later  
+- PostgreSQL: Installed locally or will be installed by the script  
+- File Required: `database.sql` (schema + data)
+
+---
+
+### What the Script Does
+
+`create_tables.sh` performs all the following automatically:
+
+1. Installs PostgreSQL if missing.  
+2. Starts and enables the PostgreSQL service.  
+3. Creates a PostgreSQL user `nefos` with password `xotour`.  
+4. Creates the database `project_db` owned by `nefos`.  
+5. Imports all schema and data from `database.sql`.  
+6. Tests the connection to confirm a valid setup.
+
+---
+
+### Setup Instructions
+
+1. Place the files in your project directory:
+```
+create_tables.sh
+database.sql
+```
+
+2. Make the script executable:
+```bash
+chmod +x create_tables.sh
+```
+
+3. Run the setup script:
+```bash
+./create_tables.sh
+```
+
+The script will:
+- Install PostgreSQL (if not installed)
+- Start the PostgreSQL service
+- Create user `nefos` (password `xotour`)
+- Create database `project_db`
+- Import schema and data automatically
+
+---
+
+### Verify Installation
+
+Check that the tables were created:
+```bash
+sudo -u postgres psql -d project_db -c "\dt"
+```
+
+Or connect using the created user:
+```bash
+PGPASSWORD="xotour" psql -U nefos -d project_db -h localhost
+```
+
+If you can see the database tables, your setup is complete.
+
+---
+
+### Optional: Quick Database Reset
+
+If you are testing frequently and need to reset your local database:
+
+Create a helper script `recreate_database.sh`:
 
 ```bash
 #!/bin/bash
-# recreate_database.sh
-# Full PostgreSQL initialization script (creates DB, schema, and inserts data)
-# Works even if the database does not exist yet.
-
-DB_NAME="project_db"
-DB_USER="postgres"
-DB_PASSWORD="xotour"
-DB_HOST="localhost"
-DB_PORT="5432"
-SQL_FILE="database.sql"
-
-# Check if psql exists
-if ! command -v psql &> /dev/null
-then
-    echo "❌ psql command not found. Please install PostgreSQL client tools first."
-    exit 1
-fi
-
-# Export password for non-interactive authentication
-export PGPASSWORD=$DB_PASSWORD
-
-echo "🚀 Starting PostgreSQL database setup..."
-echo "---------------------------------------"
-
-# Create database if it doesn't exist
-DB_EXISTS=$(psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'")
-if [ "$DB_EXISTS" != "1" ]; then
-    echo "🆕 Creating database '$DB_NAME'..."
-    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -c "CREATE DATABASE $DB_NAME;"
-else
-    echo "⚠️ Database '$DB_NAME' already exists. Dropping and recreating..."
-    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -c "DROP DATABASE $DB_NAME;"
-    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -c "CREATE DATABASE $DB_NAME;"
-fi
-
-# Load schema and data from SQL dump
-echo "📥 Importing schema and data from $SQL_FILE ..."
-psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" -f "$SQL_FILE"
-
-if [ $? -eq 0 ]; then
-    echo "✅ Database '$DB_NAME' initialized successfully!"
-else
-    echo "❌ An error occurred during initialization. Check your SQL file."
-    exit 1
-fi
+sudo -u postgres psql -c "DROP DATABASE IF EXISTS project_db;"
+sudo -u postgres psql -c "CREATE DATABASE project_db OWNER nefos;"
+sudo -u postgres psql -d project_db -f database.sql
 ```
 
-### 🧠 Usage
-
-1. Place this script in your project root **next to** `database.sql`.
-2. Make it executable:
-   ```bash
-   chmod +x recreate_database.sh
-   ```
-3. Run it:
-   ```bash
-   ./recreate_database.sh
-   ```
-
-### 🧩 What It Does
-- Checks for PostgreSQL client (`psql`)
-- Drops any existing `project_db`
-- Creates a new database from scratch
-- Imports **schema and data** from `database.sql`
-- Uses password via `PGPASSWORD` (non-interactive mode)
-
-### 💡 Optional
-If you want to initialize with a **custom PostgreSQL user** instead of `postgres`, edit these variables at the top of the script:
-
+Make it executable:
 ```bash
-DB_USER="your_username"
-DB_PASSWORD="your_password"
+chmod +x recreate_database.sh
+```
+
+Run:
+```bash
+./recreate_database.sh
+```
+
+This will cleanly drop and reimport all schema and data from `database.sql`.
+
+---
+
+### Example Terminal Output
+
+```
+Starting PostgreSQL setup...
+---------------------------------------
+PostgreSQL is already installed.
+Ensuring PostgreSQL service is running...
+Database 'project_db' and user 'nefos' created successfully.
+Importing schema and data from database.sql ...
+Database import completed successfully.
+Testing connection...
+Connection test successful! Setup completed.
+---------------------------------------
+Setup finished. Database 'project_db' ready for use.
 ```

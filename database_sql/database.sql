@@ -1,92 +1,13 @@
 --
--- PostgreSQL database cluster dump
---
-
--- Started on 2025-11-05 22:04:37 EET
-
-\restrict a09XcVThFIGygSxw42pe7XOsmTL96DyfyRwJprRA6tdmvcjciPu1928DGQtXVKY
-
-SET default_transaction_read_only = off;
-
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-
---
--- Roles
---
-
-CREATE ROLE postgres;
-ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:L0ixYxjzIh5jXJO/13VSNw==$bSJq5R1q8JCZOyUw3pvFGggoR2c5bZgLaRuDfa5u76E=:zhuDUQ+SvSR7RSGn9u0jUsL6Ow8ybAgwBY1rtZl6qWE=';
-
---
--- User Configurations
---
-
-
-
-
-
-
-
-
-\unrestrict a09XcVThFIGygSxw42pe7XOsmTL96DyfyRwJprRA6tdmvcjciPu1928DGQtXVKY
-
---
--- Databases
---
-
---
--- Database "template1" dump
---
-
-\connect template1
-
---
 -- PostgreSQL database dump
 --
 
-\restrict faFNN02D1A6cgEBo7eCYnRxH2k7qGqdmrdOQr4kGADTnOMV2SIA2q4KvqYSRPYL
+\restrict kKf85P2p4cIql8KFyISO6xhBzqfNHqtIjVev7K4ZhEgoQKuPPWsw40vDOdlPNoN
 
 -- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 
--- Started on 2025-11-05 22:04:37 EET
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
--- Completed on 2025-11-05 22:04:37 EET
-
---
--- PostgreSQL database dump complete
---
-
-\unrestrict faFNN02D1A6cgEBo7eCYnRxH2k7qGqdmrdOQr4kGADTnOMV2SIA2q4KvqYSRPYL
-
---
--- Database "postgres" dump
---
-
-\connect postgres
-
---
--- PostgreSQL database dump
---
-
-\restrict OmU8eybAMBD82Jk5KMCQynZUv1GxYTZX7EepL7GQDuldhRMRd1vMZXObf6EAr9R
-
--- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
--- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
-
--- Started on 2025-11-05 22:04:37 EET
+-- Started on 2025-11-05 22:56:10 EET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -392,7 +313,7 @@ ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
 
 
 --
--- TOC entry 3334 (class 2604 OID 17561)
+-- TOC entry 3334 (class 2604 OID 17622)
 -- Name: attachments attachment_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -400,7 +321,7 @@ ALTER TABLE ONLY public.attachments ALTER COLUMN attachment_id SET DEFAULT nextv
 
 
 --
--- TOC entry 3332 (class 2604 OID 17541)
+-- TOC entry 3332 (class 2604 OID 17623)
 -- Name: comments comment_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -408,7 +329,7 @@ ALTER TABLE ONLY public.comments ALTER COLUMN comment_id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 3327 (class 2604 OID 17513)
+-- TOC entry 3327 (class 2604 OID 17624)
 -- Name: tasks task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -416,7 +337,7 @@ ALTER TABLE ONLY public.tasks ALTER COLUMN task_id SET DEFAULT nextval('public.t
 
 
 --
--- TOC entry 3324 (class 2604 OID 17480)
+-- TOC entry 3324 (class 2604 OID 17625)
 -- Name: teams team_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -424,7 +345,7 @@ ALTER TABLE ONLY public.teams ALTER COLUMN team_id SET DEFAULT nextval('public.t
 
 
 --
--- TOC entry 3319 (class 2604 OID 17463)
+-- TOC entry 3319 (class 2604 OID 17626)
 -- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -785,17 +706,11 @@ ALTER TABLE ONLY public.teams
     ADD CONSTRAINT teams_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES public.users(user_id) ON DELETE SET NULL;
 
 
--- Completed on 2025-11-05 22:04:37 EET
+-- Completed on 2025-11-05 22:56:11 EET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict OmU8eybAMBD82Jk5KMCQynZUv1GxYTZX7EepL7GQDuldhRMRd1vMZXObf6EAr9R
-
--- Completed on 2025-11-05 22:04:37 EET
-
---
--- PostgreSQL database cluster dump complete
---
+\unrestrict kKf85P2p4cIql8KFyISO6xhBzqfNHqtIjVev7K4ZhEgoQKuPPWsw40vDOdlPNoN
 
