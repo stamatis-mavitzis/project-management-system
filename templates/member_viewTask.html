@@ -28,7 +28,7 @@
       <p><strong>⚡ Priority:</strong> <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span></p>
       <p><strong>⏰ Due:</strong> {{ task.due_date | format_date if task.due_date else "-" }}</p>
     </div>
-
+    
     <div class="task-description">
       <h2>📝 Description</h2>
       <p>{{ task.description }}</p>
