@@ -2,9 +2,9 @@
 -- PostgreSQL database cluster dump
 --
 
--- Started on 2025-10-26 14:06:21 EET
+-- Started on 2025-11-05 21:46:00 EET
 
-\restrict 54wulTK32nCVFaBFAlF88SLclnficKeuOzjVV4grGJCje8HucHbbRutgb9tsutB
+\restrict rrYfqGEAEV7O5s4WI4iBTnug3JfQ5mmMfik839aC8V6YVeAoXhSsjHoZBpHCOpZ
 
 SET default_transaction_read_only = off;
 
@@ -29,7 +29,7 @@ ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION
 
 
 
-\unrestrict 54wulTK32nCVFaBFAlF88SLclnficKeuOzjVV4grGJCje8HucHbbRutgb9tsutB
+\unrestrict rrYfqGEAEV7O5s4WI4iBTnug3JfQ5mmMfik839aC8V6YVeAoXhSsjHoZBpHCOpZ
 
 --
 -- Databases
@@ -45,12 +45,12 @@ ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION
 -- PostgreSQL database dump
 --
 
-\restrict ZW7trGb2qRKRW9F92aZma097PthkWvCWKKJTTqQDqhXiZMpCxcl5tR3iPDGIf4S
+\restrict sSfhNmKpXnfJhCGy96SAK1Hqo6eY0qhZNBShafp2znTR4I4L86tO8O6vqMG4swF
 
 -- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 
--- Started on 2025-10-26 14:06:21 EET
+-- Started on 2025-11-05 21:46:00 EET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -63,13 +63,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
--- Completed on 2025-10-26 14:06:21 EET
+-- Completed on 2025-11-05 21:46:00 EET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ZW7trGb2qRKRW9F92aZma097PthkWvCWKKJTTqQDqhXiZMpCxcl5tR3iPDGIf4S
+\unrestrict sSfhNmKpXnfJhCGy96SAK1Hqo6eY0qhZNBShafp2znTR4I4L86tO8O6vqMG4swF
 
 --
 -- Database "postgres" dump
@@ -81,12 +81,12 @@ SET row_security = off;
 -- PostgreSQL database dump
 --
 
-\restrict Ko3YxzCguSDuPcomo93dkc0nUJjdhUt3hRZqdaKeZkXTpmrUVcKDa3PTWtKuuqP
+\restrict x9tbAjEVL9KKstp2ogO5NvuvkflQwnFLRE5ajjazKpKQJHzDD1jnsZTKP0TQAD5
 
 -- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 
--- Started on 2025-10-26 14:06:21 EET
+-- Started on 2025-11-05 21:46:00 EET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -453,6 +453,11 @@ COPY public.comments (comment_id, task_id, author_id, content, created_at) FROM 
 3	1	2	this is a comment	2025-10-25 14:04:33.89736
 4	4	2	Workd hard, happy coding!	2025-10-26 06:18:22.294336
 5	1	3	I have start working	2025-10-26 06:27:25.302071
+6	1	2	work hard, play hard, keep working you are doing great	2025-11-03 19:50:15.168876
+7	4	14	I will start ASAP when i get back home my leader!	2025-11-03 21:14:33.492999
+8	5	3	I have completed the task i will send a photo of my work later	2025-11-03 23:46:36.777816
+9	1	3	My work is in progres, i will let you leader know	2025-11-04 11:08:09.093834
+10	5	2	Send me a photo of your work i ll wait	2025-11-05 19:39:12.671193
 \.
 
 
@@ -464,8 +469,9 @@ COPY public.comments (comment_id, task_id, author_id, content, created_at) FROM 
 
 COPY public.tasks (task_id, team_id, title, description, created_by, assigned_to, status, priority, due_date, created_at, updated_at) FROM stdin;
 4	1	This is a test Task name	Description develop an app that looks like Jira	2	14	TODO	LOW	2026-01-01	2025-10-25 15:23:55.53071	2025-10-25 15:23:55.53071
-1	1	Implement Authentication	Develop user login and JWT auth system	2	3	IN_PROGRESS	HIGH	2025-12-31	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
 5	6	Here is your Task to implement	Create a database for the project	2	3	DONE	HIGH	2026-02-02	2025-10-26 01:19:01.014552	2025-10-26 01:19:01.014552
+1	1	Implement Authentication	Develop user login and JWT auth system	2	3	IN_PROGRESS	HIGH	2025-12-31	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
+6	1	Your first task	Implement a code that generate random numbers	2	16	TODO	LOW	2027-01-01	2025-11-03 21:12:03.425861	2025-11-03 21:12:03.425861
 \.
 
 
@@ -481,6 +487,7 @@ COPY public.team_members (team_id, user_id, joined_at) FROM stdin;
 1	14	2025-10-25 13:30:07.325174
 6	3	2025-10-25 23:06:47.725373
 6	6	2025-10-25 23:07:01.222974
+1	16	2025-11-03 21:10:57.353386
 \.
 
 
@@ -505,16 +512,19 @@ COPY public.teams (team_id, name, description, leader_id, created_at) FROM stdin
 COPY public.users (user_id, username, email, password, name, surname, role, status, created_at, updated_at) FROM stdin;
 1	admin	admin@gmail.com	123	System	Admin	ADMIN	ACTIVE	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
 2	leader1	leader@gmail.com	123	Alice	Smith	TEAM_LEADER	ACTIVE	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
-3	member1	member@gmail.com	123	Bob	Brown	MEMBER	ACTIVE	2025-10-22 18:16:10.386063	2025-10-22 18:16:10.386063
-11	leader2	leader2@gmail.com	123	a	A	TEAM_LEADER	ACTIVE	2025-10-22 20:31:33.028578	2025-10-22 20:31:33.028578
-13	leader3	leader3@gmail.com	123	a	a	TEAM_LEADER	ACTIVE	2025-10-22 20:33:33.305442	2025-10-22 20:33:33.305442
 15	kostakis	kolokithopoylos@hotmail.com	123	kostakis	botrini	MEMBER	INACTIVE	2025-10-23 01:12:53.685286	2025-10-23 01:12:53.685286
-6	member2	member2@gmail.com	123	b	b	MEMBER	ACTIVE	2025-10-22 20:11:39.348129	2025-10-22 20:11:39.348129
-14	sakos	sakos@gmail.com	123	sakos	sasakos	MEMBER	ACTIVE	2025-10-23 00:09:59.962394	2025-10-23 00:09:59.962394
-8	member3	member3@gmail.om	123	a	A	MEMBER	ACTIVE	2025-10-22 20:22:10.976003	2025-10-22 20:22:10.976003
-10	member4	member4@gmail.com	123	a	a	MEMBER	ACTIVE	2025-10-22 20:29:00.818128	2025-10-22 20:29:00.818128
+18	leadertest	leadertest@gmail.com	123	leader	leader	TEAM_LEADER	INACTIVE	2025-11-03 19:43:06.382808	2025-11-03 19:43:06.382808
+5	admin2	admin2@gmail.com	123	a	a	ADMIN	ACTIVE	2025-10-22 19:54:50.58989	2025-11-03 21:41:32.486515
+17	admintest	admintest@gmail.com	123	admin	admin	ADMIN	ACTIVE	2025-11-03 19:42:08.951746	2025-11-03 21:41:44.94175
+11	leader2	leader2@gmail.com	123	a	A	TEAM_LEADER	ACTIVE	2025-10-22 20:31:33.028578	2025-11-03 21:42:11.65757
+13	leader3	leader3@gmail.com	123	a	a	TEAM_LEADER	ACTIVE	2025-10-22 20:33:33.305442	2025-11-03 21:42:21.170975
+3	member1	member@gmail.com	123	Bob	Brown	MEMBER	ACTIVE	2025-10-22 18:16:10.386063	2025-11-03 21:42:34.288373
 16	membertest	membertest@gmail.com	123	membertest	test	MEMBER	INACTIVE	2025-10-25 23:06:03.966808	2025-10-25 23:06:03.966808
-5	admin2	admin2@gmail.com	123	a	a	ADMIN	ACTIVE	2025-10-22 19:54:50.58989	2025-10-22 19:54:50.58989
+14	sakos	sakos@gmail.com	123	sakos	sasakos	MEMBER	ACTIVE	2025-10-23 00:09:59.962394	2025-11-03 21:42:54.068128
+10	member4	member4@gmail.com	123	a	a	MEMBER	ACTIVE	2025-10-22 20:29:00.818128	2025-11-03 21:42:58.238499
+8	member3	member3@gmail.om	123	a	A	MEMBER	ACTIVE	2025-10-22 20:22:10.976003	2025-11-03 21:43:00.53073
+6	member2	member2@gmail.com	123	b	b	MEMBER	ACTIVE	2025-10-22 20:11:39.348129	2025-11-03 21:43:05.6579
+19	smavitzis	smavitzis@gmail.com	123	stamatis	mavitzis	MEMBER	ACTIVE	2025-11-04 15:54:41.211008	2025-11-04 15:55:22.453002
 \.
 
 
@@ -533,7 +543,7 @@ SELECT pg_catalog.setval('public.attachments_attachment_id_seq', 1, false);
 -- Name: comments_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.comments_comment_id_seq', 5, true);
+SELECT pg_catalog.setval('public.comments_comment_id_seq', 10, true);
 
 
 --
@@ -542,7 +552,7 @@ SELECT pg_catalog.setval('public.comments_comment_id_seq', 5, true);
 -- Name: tasks_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tasks_task_id_seq', 5, true);
+SELECT pg_catalog.setval('public.tasks_task_id_seq', 6, true);
 
 
 --
@@ -560,7 +570,7 @@ SELECT pg_catalog.setval('public.teams_team_id_seq', 6, true);
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 16, true);
+SELECT pg_catalog.setval('public.users_user_id_seq', 19, true);
 
 
 --
@@ -775,15 +785,15 @@ ALTER TABLE ONLY public.teams
     ADD CONSTRAINT teams_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES public.users(user_id) ON DELETE SET NULL;
 
 
--- Completed on 2025-10-26 14:06:21 EET
+-- Completed on 2025-11-05 21:46:00 EET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Ko3YxzCguSDuPcomo93dkc0nUJjdhUt3hRZqdaKeZkXTpmrUVcKDa3PTWtKuuqP
+\unrestrict x9tbAjEVL9KKstp2ogO5NvuvkflQwnFLRE5ajjazKpKQJHzDD1jnsZTKP0TQAD5
 
--- Completed on 2025-10-26 14:06:21 EET
+-- Completed on 2025-11-05 21:46:00 EET
 
 --
 -- PostgreSQL database cluster dump complete
