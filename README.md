@@ -245,18 +245,56 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "pdf"}
 
 ## Quickstart Guide
 
-### Local Environment
+### Local Environment Setup (Development Mode)
+
+Follow these steps to run the Project Management System locally without Docker:
 
 ```bash
+# 1. Clone the repository from GitHub
 git clone https://github.com/stamatis-mavitzis/project-management-system.git
+
+# 2. Navigate into the project directory
 cd project-management-system
+
+# 3. Create and activate a virtual environment
 python3 -m venv venv
 source venv/bin/activate
+
+# 4. Install all required dependencies
 pip install -r requirements.txt
-psql -U postgres -d project_db -f database_sql/create_tables.sql
+
+# 5. Initialize the PostgreSQL database schema and data
+cd database_sql
+chmod +x create_tables.sh
+./create_tables.sh
+
+# 6. Return to the main project directory
+cd ..
+
+# 7. Run the Flask development server
 python backend_server_app.py
 ```
-Then visit: **http://127.0.0.1:5000**
+
+Once the application starts successfully, open your browser and visit:
+
+👉 **http://127.0.0.1:5000**
+
+This will launch the PMS web interface, where you can:
+- **Sign up or log in** as Admin, Team Leader, or Team Member.  
+- **Manage teams and tasks** interactively.  
+- **Upload attachments**, **add comments**, and **track progress** in real time.
+
+#### Notes
+- Ensure **PostgreSQL** is installed and running on your system.  
+  If not, the `create_tables.sh` script will install and configure it automatically.
+- Default database credentials (editable in `config.py`):
+  ```
+  DB_USER=nefos
+  DB_PASSWORD=xotour
+  DB_NAME=project_db
+  DB_HOST=localhost
+  ```
+- To reset the database, run `recreate_database.sh` (included in `database_sql/`).
 
 ---
 
