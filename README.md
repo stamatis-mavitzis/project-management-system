@@ -66,64 +66,91 @@ The backend is implemented using **Flask Blueprints**, and the frontend is compo
 ```
 Project/
 │
-├── backend_server_app.py                 # Flask application entry point and blueprint registration
-├── config.py                             # Configuration for database, secrets, upload paths
-├── db.py                                 # PostgreSQL connection and error handling
-├── requirements.txt                      # Python dependencies
-├── source_run_flash.sh                   # Shell script to launch Flask server
+├── backend_server_app.py                 # Main Flask application entry point; registers all blueprints
+├── config.py                             # Central configuration for DB, secret keys, and paths
+├── db.py                                 # Database connection logic (PostgreSQL / SQLite)
+├── requirements.txt                      # Python dependencies for the backend
+├── source_run_flash.sh                   # Shell script to start the Flask server
 │
-├── databe_sql/
-│   ├── create_tables.sql                 # SQL schema and initial dataset
-│   └── database.db                       # Optional database export
+├── database_sql/                         # Database schema and setup files
+│   ├── create_tables.sql                 # SQL script for creating tables and inserting initial data
+│   └── database.db                       # SQLite or PostgreSQL export (sample database)
 │
-├── routes/                               # Modular Flask blueprints
-│   ├── homepage.py                       # Entry route for role selection
-│   ├── admin_authenticate.py             # Admin signup/login/logout
-│   ├── admin_mainpage.py                 # Admin dashboard and management actions
-│   ├── admin_teamLeader_member_options.py# Role selection pages
-│   ├── teamLeader_authenticate.py        # Team Leader authentication routes
-│   ├── teamLeader_mainpage.py            # Team Leader task and team management
-│   ├── member_authenticate.py            # Member authentication routes
-│   └── member_mainpage.py                # Member dashboard and task management
+├── routes/                               # Flask Blueprints (Microservices logic)
+│   ├── homepage.py                       # Landing page and role selection routes
+│   ├── admin_authenticate.py             # Admin login, signup, and authentication routes
+│   ├── admin_mainpage.py                 # Admin main dashboard & management functions
+│   ├── admin_teamLeader_member_options.py# Handles transitions between user roles
+│   ├── teamLeader_authenticate.py        # Team Leader login/signup and authentication
+│   ├── teamLeader_mainpage.py            # Team Leader dashboard & task management routes
+│   ├── member_authenticate.py            # Member authentication routes (login/signup)
+│   └── member_mainpage.py                # Member dashboard, tasks, and comments routes
 │
-├── static/                               # Static assets (CSS, JS, uploads, images)
+├── static/                               # Static resources (CSS, JS, images, uploads)
 │   ├── css/
-│   │   ├── style.css
-│   │   ├── mainpage.css
-│   │   ├── teamLeader.css
-│   │   ├── admin.css
-│   │   └── member.css 
+│   │   ├── style.css                     # General layout and color scheme
+│   │   ├── mainpage.css                  # Dashboard layout and overview styling
+│   │   ├── teamLeader.css                # Team Leader page styling
+│   │   ├── admin.css                     # Admin interface styles
+│   │   └── member.css                    # Member UI and forms styling
+│   │
 │   ├── script/
-│   │   └── script.js
+│   │   └── script.js                     # Global client-side scripts (buttons, alerts, etc.)
+│   │
 │   ├── images/
-│   │   └── icon_pms.svg                  # Application favicon/icon
-│   └── uploads/                          # Uploaded user files                        # Uploaded user files
+│   │   └── icon_pms.svg                  # Application logo / favicon
+│   │
+│   └── uploads/                          # Uploaded attachments (user files, comments)
 │
-├── templates/                            # HTML pages (Jinja2)
-│   ├── index.html                        # Homepage
-│   ├── admin_login.html
-│   ├── admin_mainpage.html
-│   ├── admin_manageUsers.html
-│   ├── admin_manageTeams.html
-│   ├── admin_show_tasks_and_projects.html
-│   ├── admin_or_teamLeader_or_member.html
-│   ├── teamLeader_mainpage.html
-│   ├── teamLeader_teamDetails.html
-│   ├── teamLeader_manageTasksProjects.html
-│   ├── member_mainpage.html
-│   ├── member_viewTasks.html
-│   ├── member_viewTask.html
-│   ├── member_addComment.html
-│   ├── member_notifications_and_deadlines.html
-│   ├── member_teamsIncluded.html
-│   ├── member_viewTeam.html
-│   ├── signup and login forms (for all roles)
-│   └── other helper templates
+├── templates/                            # Jinja2 HTML templates for Flask frontend
+│   ├── index.html                        # Homepage (role selection and intro)
+│   ├── admin_login.html                  # Admin login form
+│   ├── admin_signup.html                 # Admin signup form
+│   ├── admin_mainpage.html               # Admin dashboard view
+│   ├── admin_manageUsers.html            # Admin panel for managing user accounts
+│   ├── admin_manageTeams.html            # Admin interface for team creation/deletion
+│   ├── admin_show_tasks.html             # Admin view of all tasks and projects
+│   ├── admin_or_teamLeader_or_member.html# Common page for selecting user role
+│   ├── teamLeader_mainpage.html          # Team Leader main dashboard
+│   ├── teamLeader_teamDetails.html       # Detailed view of a specific team and its members
+│   ├── teamLeader_manageTasks.html       # Manage team tasks (create/edit/delete)
+│   ├── teamLeader_viewTask.html          # Task detail page for Team Leader
+│   ├── edit_task.html                    # Task editing interface (Team Leader)
+│   ├── view_task.html                    # View task details (generic)
+│   ├── member_mainpage.html              # Member main page (overview of personal tasks)
+│   ├── member_viewTasks.html             # View all assigned tasks
+│   ├── member_viewTask.html              # Task detail view for member
+│   ├── member_addComment.html            # Add comments to tasks
+│   ├── member_notifications.html         # View notifications and deadlines
+│   ├── member_teamsIncluded.html         # View all teams a member belongs to
+│   ├── member_viewTeam.html              # Detailed team view for member
+│   ├── teamLeader_login.html             # Team Leader login page
+│   ├── teamLeader_signup.html            # Team Leader signup page
+│   ├── member_login.html                 # Member login page
+│   ├── member_signup.html                # Member signup page
+│   └── error.html                        # Error message or fallback page
 │
 ├── utils/
-│   └── file_utils.py                     # File validation and upload handling
+│   └── file_utils.py                     # Helper for file handling and uploads
 │
-└── venv/                                 # Virtual environment (optional)
+├── docs/                                 # Documentation and assets for reports
+│   ├── architecture_diagram.png          # System architecture diagram
+│   ├── er_diagram.png                    # Entity-Relationship diagram (DB model)
+│   ├── er_diagram_complete.png           # Full ER diagram version
+│   ├── system_architecture_diagram.png   # Backend + frontend + DB overview
+│   └── user_flow.png                     # User interaction flow diagram
+│
+├── .idea/                                # IDE configuration files (PyCharm project metadata)
+│   └── misc.xml, workspace.xml, etc.     # Internal settings; not required for deployment
+│
+├── __pycache__/                          # Compiled Python cache directories (auto-generated)
+│   └── *.pyc                             # Bytecode-compiled Python files
+│
+└── venv/                                 # Virtual environment for Python dependencies
+    ├── bin/                              # Executables and activation scripts
+    ├── Lib/                              # Installed Python packages (Flask, psycopg2, etc.)
+    ├── Include/                          # C headers for installed modules
+    └── pyvenv.cfg                        # Virtual environment configuration file                              # Virtual environment (optional)
 ```
 
 ---
