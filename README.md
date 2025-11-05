@@ -127,21 +127,10 @@ Project/
 │   ├── teamLeader_login.html             # Team Leader login page
 │   ├── teamLeader_signup.html            # Team Leader signup page
 │   ├── member_login.html                 # Member login page
-│   ├── member_signup.html                # Member signup page
-│   └── error.html                        # Error message or fallback page
+│   └── member_signup.html                # Member signup page
 │
 ├── utils/
 │   └── file_utils.py                     # Helper for file handling and uploads
-│
-├── docs/                                 # Documentation and assets for reports
-│   ├── architecture_diagram.png          # System architecture diagram
-│   ├── er_diagram.png                    # Entity-Relationship diagram (DB model)
-│   ├── er_diagram_complete.png           # Full ER diagram version
-│   ├── system_architecture_diagram.png   # Backend + frontend + DB overview
-│   └── user_flow.png                     # User interaction flow diagram
-│
-├── .idea/                                # IDE configuration files (PyCharm project metadata)
-│   └── misc.xml, workspace.xml, etc.     # Internal settings; not required for deployment
 │
 ├── __pycache__/                          # Compiled Python cache directories (auto-generated)
 │   └── *.pyc                             # Bytecode-compiled Python files
