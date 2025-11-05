@@ -5,10 +5,16 @@
     <title>Edit Task</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/teamLeader.css') }}">
 </head>
 <body>
 
+<!-- Header -->
+<div class="header">
+    <h1>✏️ Edit Task</h1>
+</div>
+
+<!-- Flash Messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div class="flash-container">
@@ -19,37 +25,46 @@
   {% endif %}
 {% endwith %}
 
-<h1>Edit Task</h1>
+<!-- Main Form Section -->
+<div class="page-wrapper">
+    <h2 class="page-title">Update Task Details</h2>
+    <hr class="section-divider">
 
-<form method="POST" action="{{ url_for('teamLeader_mainpage_bp.edit_task', task_id=task.task_id) }}">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" value="{{ task.title }}" required><br><br>
+    <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.edit_task', task_id=task.task_id) }}" class="form-section">
 
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description" required>{{ task.description }}</textarea><br><br>
+        <label for="title"><strong>Title</strong></label>
+        <input type="text" id="title" name="title" value="{{ task.title }}" required>
 
-    <label for="status">Status:</label>
-    <select id="status" name="status" required>
-        <option value="TODO" {% if task.status == "TODO" %}selected{% endif %}>TODO</option>
-        <option value="IN PROGRESS" {% if task.status == "IN PROGRESS" %}selected{% endif %}>IN PROGRESS</option>
-        <option value="DONE" {% if task.status == "DONE" %}selected{% endif %}>DONE</option>
-    </select><br><br>
+        <label for="description"><strong>Description</strong></label>
+        <textarea id="description" name="description" required>{{ task.description }}</textarea>
 
-    <label for="priority">Priority:</label>
-    <select id="priority" name="priority" required>
-        <option value="Low" {% if task.priority == "Low" %}selected{% endif %}>Low</option>
-        <option value="Medium" {% if task.priority == "Medium" %}selected{% endif %}>Medium</option>
-        <option value="High" {% if task.priority == "High" %}selected{% endif %}>High</option>
-    </select><br><br>
+        <label for="status"><strong>Status</strong></label>
+        <select id="status" name="status" required>
+            <option value="TODO" {% if task.status == "TODO" %}selected{% endif %}>TODO</option>
+            <option value="IN PROGRESS" {% if task.status == "IN PROGRESS" %}selected{% endif %}>IN PROGRESS</option>
+            <option value="DONE" {% if task.status == "DONE" %}selected{% endif %}>DONE</option>
+        </select>
 
-    <label for="due_date">Due Date:</label>
-    <input type="date" id="due_date" name="due_date" value="{{ task.due_date }}"><br><br>
+        <label for="priority"><strong>Priority</strong></label>
+        <select id="priority" name="priority" required>
+            <option value="Low" {% if task.priority == "Low" %}selected{% endif %}>Low</option>
+            <option value="Medium" {% if task.priority == "Medium" %}selected{% endif %}>Medium</option>
+            <option value="High" {% if task.priority == "High" %}selected{% endif %}>High</option>
+        </select>
 
-    <button type="submit">Update Task</button>
-</form>
+        <label for="due_date"><strong>Due Date</strong></label>
+        <input type="date" id="due_date" name="due_date" value="{{ task.due_date }}">
 
-<hr>
-<a href="{{ request.referrer or url_for('teamLeader_mainpage_bp.view_task', task_id=task.task_id) }}">⬅ Back</a>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">💾 Save Changes</button>
+        </div>
+    </form>
+
+    <!-- Back button at the end -->
+    <div class="back-btn-container">
+        <a href="{{ request.referrer or url_for('teamLeader_mainpage_bp.view_task', task_id=task.task_id) }}" class="btn-back">⬅ Back</a>
+    </div>
+</div>
 
 </body>
 </html>

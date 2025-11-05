@@ -501,3 +501,76 @@ table.styled-table tr td.task-actions button {
 }
 
 
+/* ---- Edit Task Page ---- */
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-section label {
+    color: #0d47a1;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.form-section input,
+.form-section textarea,
+.form-section select {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #f9fbff;
+    transition: border-color 0.3s;
+}
+
+.form-section input:focus,
+.form-section textarea:focus,
+.form-section select:focus {
+    border-color: #1976d2;
+    outline: none;
+    background-color: #fff;
+}
+
+.form-section textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Button styles reuse existing theme */
+.btn-primary {
+    background-color: #1976d2;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+.btn-primary:hover {
+    background-color: #0d47a1;
+}
+
+.btn-back {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 10px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+.btn-back:hover {
+    background-color: #bdbdbd;
+}
