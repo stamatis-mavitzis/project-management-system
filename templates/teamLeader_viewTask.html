@@ -9,6 +9,10 @@
 </head>
 <body>
 
+<div class="header">
+    <h1>📋 Task Details</h1>
+</div>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div class="flash-container">
@@ -19,69 +23,83 @@
   {% endif %}
 {% endwith %}
 
-<h1>Task Details</h1>
+<div class="page-wrapper">
 
-<table border="1" cellpadding="6">
-    <tr>
-        <th>Title</th>
-        <td>{{ task.title }}</td>
-    </tr>
-    <tr>
-        <th>Description</th>
-        <td>{{ task.description }}</td>
-    </tr>
-    <tr>
-        <th>Status</th>
-        <td>{{ task.status }}</td>
-    </tr>
-    <tr>
-        <th>Priority</th>
-        <td>{{ task.priority }}</td>
-    </tr>
-    <tr>
-        <th>Due Date</th>
-        <td>{{ task.due_date| format_date }}</td>
-    </tr>
-    <tr>
-        <th>Created By</th>
-        <td>{{ task.created_by_username }}</td>
-    </tr>
-    <tr>
-        <th>Assigned To</th>
-        <td>{{ task.assigned_to_username }}</td>
-    </tr>
-</table>
+    <!-- Task Information -->
+    <div class="card">
+        <h2 class="page-title">{{ task.title }}</h2>
+        <p class="description">{{ task.description }}</p>
 
-<hr>
-<h2>💬 Comments</h2>
+        <hr class="section-divider">
 
-{% if comments %}
-    <ul>
-        {% for comment in comments %}
-            <li>
-                <strong>{{ comment.username }}</strong> 
-                <em>({{ comment.created_at | format_date }})</em><br>
-                {{ comment.content }}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No comments yet.</p>
-{% endif %}
+        <div class="table-wrapper">
+            <table class="styled-table">
+                <tbody>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ task.status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Priority</th>
+                        <td>{{ task.priority }}</td>
+                    </tr>
+                    <tr>
+                        <th>Due Date</th>
+                        <td>{{ task.due_date | format_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Created By</th>
+                        <td>{{ task.created_by_username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Assigned To</th>
+                        <td>{{ task.assigned_to_username }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<hr>
+    <hr class="section-divider">
 
-<form action="{{ url_for('teamLeader_mainpage_bp.add_comment', task_id=task.task_id) }}" method="POST">
-    <textarea name="content" placeholder="Write your comment..." required></textarea><br>
-    <button type="submit">💬 Add Comment</button>
-</form>
+    <!-- Comments Section -->
+    <div class="card">
+        <h2>💬 Comments</h2>
+        {% if comments %}
+            <ul class="member-list">
+                {% for comment in comments %}
+                    <li class="member-card">
+                        <div class="member-avatar">{{ comment.username[0]|upper }}</div>
+                        <div>
+                            <strong>{{ comment.username }}</strong>
+                            <em>({{ comment.created_at | format_date }})</em><br>
+                            <span>{{ comment.content }}</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-message">No comments yet.</p>
+        {% endif %}
+    </div>
 
-<hr>
-<form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_manage_team', team_id=team_id) }}" method="get">
-  <button type="submit">
-    ← Back to Team
-  </button>
-</form>
+    <!-- Add Comment Form -->
+    <div class="card form-section">
+        <h3>Add a Comment</h3>
+        <form action="{{ url_for('teamLeader_mainpage_bp.add_comment', task_id=task.task_id) }}" method="POST">
+            <textarea name="content" placeholder="Write your comment..." required></textarea>
+            <button type="submit" class="btn-primary">💬 Add Comment</button>
+        </form>
+    </div>
+
+    <!-- Back Button at Bottom -->
+    <div class="back-btn-container">
+        <form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_manage_team', team_id=team_id) }}" method="get">
+            <button type="submit" class="btn-back">← Back to Team</button>
+        </form>
+    </div>
+
+</div>
 
 </body>
 </html>
