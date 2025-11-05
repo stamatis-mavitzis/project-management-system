@@ -209,6 +209,14 @@ To initialize the database:
 psql -U postgres -d project_db -f databe_sql/create_tables.sql
 ```
 
+Initialize schema and data (sequentially):
+
+```bash
+psql -U postgres -d project_db -f databe_sql/create_tables.sql
+psql -U postgres -d project_db -f databe_sql/create_data.sql
+```
+
+
 
 ### ER Diagram (conceptual)
 ```

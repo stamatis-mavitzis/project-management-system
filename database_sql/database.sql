@@ -2,9 +2,9 @@
 -- PostgreSQL database cluster dump
 --
 
--- Started on 2025-11-05 21:46:00 EET
+-- Started on 2025-11-05 22:04:37 EET
 
-\restrict rrYfqGEAEV7O5s4WI4iBTnug3JfQ5mmMfik839aC8V6YVeAoXhSsjHoZBpHCOpZ
+\restrict a09XcVThFIGygSxw42pe7XOsmTL96DyfyRwJprRA6tdmvcjciPu1928DGQtXVKY
 
 SET default_transaction_read_only = off;
 
@@ -29,7 +29,7 @@ ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION
 
 
 
-\unrestrict rrYfqGEAEV7O5s4WI4iBTnug3JfQ5mmMfik839aC8V6YVeAoXhSsjHoZBpHCOpZ
+\unrestrict a09XcVThFIGygSxw42pe7XOsmTL96DyfyRwJprRA6tdmvcjciPu1928DGQtXVKY
 
 --
 -- Databases
@@ -45,12 +45,12 @@ ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION
 -- PostgreSQL database dump
 --
 
-\restrict sSfhNmKpXnfJhCGy96SAK1Hqo6eY0qhZNBShafp2znTR4I4L86tO8O6vqMG4swF
+\restrict faFNN02D1A6cgEBo7eCYnRxH2k7qGqdmrdOQr4kGADTnOMV2SIA2q4KvqYSRPYL
 
 -- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 
--- Started on 2025-11-05 21:46:00 EET
+-- Started on 2025-11-05 22:04:37 EET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -63,13 +63,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
--- Completed on 2025-11-05 21:46:00 EET
+-- Completed on 2025-11-05 22:04:37 EET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict sSfhNmKpXnfJhCGy96SAK1Hqo6eY0qhZNBShafp2znTR4I4L86tO8O6vqMG4swF
+\unrestrict faFNN02D1A6cgEBo7eCYnRxH2k7qGqdmrdOQr4kGADTnOMV2SIA2q4KvqYSRPYL
 
 --
 -- Database "postgres" dump
@@ -81,12 +81,12 @@ SET row_security = off;
 -- PostgreSQL database dump
 --
 
-\restrict x9tbAjEVL9KKstp2ogO5NvuvkflQwnFLRE5ajjazKpKQJHzDD1jnsZTKP0TQAD5
+\restrict OmU8eybAMBD82Jk5KMCQynZUv1GxYTZX7EepL7GQDuldhRMRd1vMZXObf6EAr9R
 
 -- Dumped from database version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
 
--- Started on 2025-11-05 21:46:00 EET
+-- Started on 2025-11-05 22:04:37 EET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -785,15 +785,15 @@ ALTER TABLE ONLY public.teams
     ADD CONSTRAINT teams_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES public.users(user_id) ON DELETE SET NULL;
 
 
--- Completed on 2025-11-05 21:46:00 EET
+-- Completed on 2025-11-05 22:04:37 EET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict x9tbAjEVL9KKstp2ogO5NvuvkflQwnFLRE5ajjazKpKQJHzDD1jnsZTKP0TQAD5
+\unrestrict OmU8eybAMBD82Jk5KMCQynZUv1GxYTZX7EepL7GQDuldhRMRd1vMZXObf6EAr9R
 
--- Completed on 2025-11-05 21:46:00 EET
+-- Completed on 2025-11-05 22:04:37 EET
 
 --
 -- PostgreSQL database cluster dump complete
