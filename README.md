@@ -24,7 +24,7 @@
 - [Troubleshooting](#troubleshooting)
 - [Contributing & Roadmap](#contributing--roadmap)
 - [Credits & License](#credits--license)
-
+- [Database Recreation Script](#database-recreation-script)
 ---
 
 ## Overview
@@ -480,3 +480,87 @@ Error example:
 **Institution:** Technical University of Crete
 
 This project is open-source and distributed for educational and academic use only.
+
+---
+
+## Database Recreation Script
+
+This project provides an automated script to **recreate the PostgreSQL database** (schema + data) from the exported SQL dump (`database.sql`).
+
+### 🔧 Script: `recreate_database.sh`
+
+```bash
+#!/bin/bash
+# recreate_database.sh
+# Full PostgreSQL initialization script (creates DB, schema, and inserts data)
+# Works even if the database does not exist yet.
+
+DB_NAME="project_db"
+DB_USER="postgres"
+DB_PASSWORD="xotour"
+DB_HOST="localhost"
+DB_PORT="5432"
+SQL_FILE="database.sql"
+
+# Check if psql exists
+if ! command -v psql &> /dev/null
+then
+    echo "❌ psql command not found. Please install PostgreSQL client tools first."
+    exit 1
+fi
+
+# Export password for non-interactive authentication
+export PGPASSWORD=$DB_PASSWORD
+
+echo "🚀 Starting PostgreSQL database setup..."
+echo "---------------------------------------"
+
+# Create database if it doesn't exist
+DB_EXISTS=$(psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'")
+if [ "$DB_EXISTS" != "1" ]; then
+    echo "🆕 Creating database '$DB_NAME'..."
+    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -c "CREATE DATABASE $DB_NAME;"
+else
+    echo "⚠️ Database '$DB_NAME' already exists. Dropping and recreating..."
+    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -c "DROP DATABASE $DB_NAME;"
+    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -c "CREATE DATABASE $DB_NAME;"
+fi
+
+# Load schema and data from SQL dump
+echo "📥 Importing schema and data from $SQL_FILE ..."
+psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" -f "$SQL_FILE"
+
+if [ $? -eq 0 ]; then
+    echo "✅ Database '$DB_NAME' initialized successfully!"
+else
+    echo "❌ An error occurred during initialization. Check your SQL file."
+    exit 1
+fi
+```
+
+### 🧠 Usage
+
+1. Place this script in your project root **next to** `database.sql`.
+2. Make it executable:
+   ```bash
+   chmod +x recreate_database.sh
+   ```
+3. Run it:
+   ```bash
+   ./recreate_database.sh
+   ```
+
+### 🧩 What It Does
+- Checks for PostgreSQL client (`psql`)
+- Drops any existing `project_db`
+- Creates a new database from scratch
+- Imports **schema and data** from `database.sql`
+- Uses password via `PGPASSWORD` (non-interactive mode)
+
+### 💡 Optional
+If you want to initialize with a **custom PostgreSQL user** instead of `postgres`, edit these variables at the top of the script:
+
+```bash
+DB_USER="your_username"
+DB_PASSWORD="your_password"
+```
