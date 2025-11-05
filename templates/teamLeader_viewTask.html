@@ -40,7 +40,7 @@
     </tr>
     <tr>
         <th>Due Date</th>
-        <td>{{ task.due_date }}</td>
+        <td>{{ task.due_date| format_date }}</td>
     </tr>
     <tr>
         <th>Created By</th>
@@ -60,7 +60,7 @@
         {% for comment in comments %}
             <li>
                 <strong>{{ comment.username }}</strong> 
-                <em>({{ comment.created_at.strftime('%Y-%m-%d %H:%M') }})</em><br>
+                <em>({{ comment.created_at | format_date }})</em><br>
                 {{ comment.content }}
             </li>
         {% endfor %}
