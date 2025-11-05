@@ -184,22 +184,6 @@ Project/
 
 ## Database Schema
 
-The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
-
-| Table            | Description                                               |
-| ---------------- | --------------------------------------------------------- |
-| **users**        | Stores all system users (admins, leaders, members)        |
-| **teams**        | Represents team entities with assigned leaders            |
-| **team_members** | Many-to-many relationship between teams and users         |
-| **tasks**        | Represents team tasks with priority, status, and due date |
-| **comments**     | Stores user comments per task (with timestamps)           |
-
-To initialize the database:
-
-```bash
-psql -U postgres -d project_db -f databe_sql/create_tables.sql
-```
-
 ### Entities
 
 The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
@@ -219,7 +203,11 @@ The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
 - tasks(task_id, title, description, status, priority, due_date, created_by, assigned_to)
 - comments(comment_id, task_id, user_id, text, created_at)
 
+To initialize the database:
 
+```bash
+psql -U postgres -d project_db -f databe_sql/create_tables.sql
+```
 
 
 ### ER Diagram (conceptual)
