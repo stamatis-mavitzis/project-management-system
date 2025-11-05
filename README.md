@@ -24,7 +24,7 @@
 - [Troubleshooting](#troubleshooting)
 - [Contributing & Roadmap](#contributing--roadmap)
 - [Credits & License](#credits--license)
-- [Database Recreation Script](#postgresql-server-setupt)
+- [PostgreSQL Server Setup](#postgresql-server-setup)
 ---
 
 ## Overview
