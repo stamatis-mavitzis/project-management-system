@@ -1,8 +1,47 @@
 /* =======================================================
-   TeamLeader Manage Tasks & Projects – Custom Styling
+   TeamLeader Manage Teams, Tasks & Details – Unified Style
    ======================================================= */
 
-/* ---- Teams Section ---- */
+/* ---- General Page ---- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fb;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---- Header ---- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    color: white;
+    padding: 20px 40px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.header h1 {
+    font-size: 1.8em;
+    margin: 0;
+}
+
+.back-btn {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---- Teams Overview (Cards Grid) ---- */
 .teams-container {
     display: flex;
     flex-wrap: wrap;
@@ -25,7 +64,7 @@
     transition: all 0.25s ease-in-out;
 }
 
-/* ✨ Added hover effect */
+/* ✨ Hover effect for team cards */
 .team-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 8px 18px rgba(0, 123, 255, 0.25);
@@ -47,7 +86,7 @@
     line-height: 1.5;
 }
 
-/* ---- Tasks Table (Overrides default) ---- */
+/* ---- Tasks Table (for teamLeader_mainpage) ---- */
 .tasks-table {
     width: 90%;
     border-collapse: collapse;
@@ -81,7 +120,111 @@
     margin-bottom: 30px;
 }
 
-/* 📱 Small responsive tweak */
+/* ---- Team Details Page ---- */
+.team-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    padding: 25px;
+    transition: transform 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.description {
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95em;
+    color: #333;
+}
+
+/* ---- Members ---- */
+.member-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 15px;
+}
+
+.member-card {
+    display: flex;
+    align-items: center;
+    background-color: #f4f6fa;
+    border-radius: 10px;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+.member-card:hover {
+    background-color: #e3f2fd;
+}
+
+.member-avatar {
+    background: #1976d2;
+    color: white;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+/* ---- Tasks Section ---- */
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.task-card {
+    border-left: 6px solid #1976d2;
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 15px;
+    transition: 0.3s;
+}
+.task-card:hover {
+    background-color: #e3f2fd;
+}
+
+.task-meta {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ---- Color indicators for task status ---- */
+.task-card.todo { border-left-color: #f57c00; }
+.task-card.in_progress { border-left-color: #1976d2; }
+.task-card.done { border-left-color: #2e7d32; }
+
+/* ---- Empty message ---- */
+.empty {
+    color: #777;
+    text-align: center;
+    padding: 15px 0;
+}
+
+/* ---- Responsive Tweaks ---- */
 @media (max-width: 768px) {
     .teams-container {
         flex-direction: column;
@@ -91,4 +234,199 @@
     .team-card {
         width: 90%;
     }
+
+    .stats {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .task-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
+
+
+
+/* =======================================================
+   TeamLeader Manage Team Details Page Styling
+   ======================================================= */
+
+.page-wrapper {
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+}
+
+.page-title {
+    text-align: center;
+    color: #1976d2;
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.highlight {
+    color: #0d47a1;
+}
+
+.team-info p {
+    font-size: 1rem;
+    color: #333;
+}
+
+.section-divider {
+    border: 0;
+    border-top: 2px solid #e0e0e0;
+    margin: 30px 0;
+}
+
+/* ---- Tables ---- */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.styled-table th {
+    background: #1976d2;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+}
+
+.styled-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.styled-table tr:hover {
+    background: #f4f8ff;
+}
+
+/* ---- Buttons ---- */
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background-color: #1976d2;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0d47a1;
+}
+
+.btn-danger {
+    background-color: #e53935;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c;
+}
+
+.btn-edit {
+    background-color: #ffa000;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #ff6f00;
+}
+
+.btn-view {
+    background-color: #43a047;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-view:hover {
+    background-color: #2e7d32;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.form-section {
+    margin-top: 30px;
+}
+
+.form-section input,
+.form-section textarea,
+.form-section select {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 8px 0 16px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+.form-section textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.empty-message {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+}
+
+.back-btn-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-back {
+    background: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.btn-back:hover {
+    background: #0d47a1;
+}
+
+
+
+
+
+
+
+

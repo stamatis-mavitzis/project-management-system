@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Manage Team</title>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon_pms.svg') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/teamLeader.css') }}">
     <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 </head>
 <body>
@@ -19,122 +19,140 @@
   {% endif %}
 {% endwith %}
 
-<h1>Manage Team: {{ team.name }}</h1>
-<p><strong>Description:</strong> {{ team.description }}</p>
-<p><strong>Leader:</strong> {{ team.leader_name }}</p>
+<div class="page-wrapper">
 
-<hr>
+    <h1 class="page-title">Manage Team: <span class="highlight">{{ team.name }}</span></h1>
 
-<h2>Team Members</h2>
-{% if members %}
-<table border="1" cellpadding="6">
-    <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    {% for member in members %}
-    <tr>
-        <td>{{ member.username }}</td>
-        <td>{{ member.email }}</td>
-        <td>{{ member.role }}</td>
-        <td>{{ member.status }}</td>
-        <td>
-            <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.remove_member', team_id=team_id) }}" style="display:inline;">
-                <input type="hidden" name="email" value="{{ member.email }}">
-                <button type="submit" onclick="return confirm('Remove this member?');">Remove</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<p>No members yet.</p>
-{% endif %}
+    <div class="team-info">
+        <p><strong>Description:</strong> {{ team.description }}</p>
+        <p><strong>Leader:</strong> {{ team.leader_name }}</p>
+    </div>
 
-<h3>Add New Member</h3>
-<form method="POST" action="{{ url_for('teamLeader_mainpage_bp.add_member', team_id=team_id) }}">
-    <label for="member_email">Member Email:</label>
-    <input type="email" id="member_email" name="member_email" required>
-    <button type="submit">Add Member</button>
-</form>
+    <hr class="section-divider">
 
-<hr>
+    <h2>Team Members</h2>
+    {% if members %}
+    <div class="table-wrapper">
+        <table class="styled-table">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.username }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.role }}</td>
+                <td>{{ member.status }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.remove_member', team_id=team_id) }}" class="inline-form">
+                        <input type="hidden" name="email" value="{{ member.email }}">
+                        <button class="btn-danger" type="submit" onclick="return confirm('Remove this member?');">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+        <p class="empty-message">No members yet.</p>
+    {% endif %}
 
-<h2>Team Tasks</h2>
-<div id="tasksContainer">
-{% if tasks %}
-<table border="1" cellpadding="6">
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Assigned To</th>
-        <th>Status</th>
-        <th>Priority</th>
-        <th>Due Date</th>
-        <th>Actions</th>
-    </tr>
-    {% for task in tasks %}
-    <tr>
-        <td>{{ task.title }}</td>
-        <td>{{ task.description }}</td>
-        <td>{{ task.assigned_to }}</td>
-        <td>{{ task.status }}</td>
-        <td>{{ task.priority }}</td>
-        <td>{{ task.due_date | format_date}}</td>
-        <td>
-            <button 
-                type="button" 
-                data-url="{{ url_for('teamLeader_mainpage_bp.view_task', task_id=task.task_id) }}" 
-                onclick="window.location.href=this.dataset.url;">
-                View
-            </button>
+    <div class="form-section">
+        <h3>Add New Member</h3>
+        <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.add_member', team_id=team_id) }}">
+            <label for="member_email">Member Email:</label>
+            <input type="email" id="member_email" name="member_email" required>
+            <button type="submit" class="btn-primary">Add Member</button>
+        </form>
+    </div>
 
-            <button 
-                type="button" 
-                data-url="{{ url_for('teamLeader_mainpage_bp.edit_task', task_id=task.task_id) }}" 
-                onclick="window.location.href=this.dataset.url;">
-                Edit
-            </button>
-            <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.delete_task', task_id=task.task_id) }}" style="display:inline;">
-                <button type="submit" onclick="return confirm('Delete this task?');">Delete</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<p>No tasks found for this team.</p>
-{% endif %}
+    <hr class="section-divider">
+
+    <h2>Team Tasks</h2>
+    <div id="tasksContainer">
+    {% if tasks %}
+    <div class="table-wrapper">
+        <table class="styled-table">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+            </tr>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.assigned_to }}</td>
+                <td>{{ task.status }}</td>
+                <td>{{ task.priority }}</td>
+                <td>{{ task.due_date | format_date }}</td>
+                <td class="task-actions">
+                    <button class="btn-view" 
+                        type="button" 
+                        data-url="{{ url_for('teamLeader_mainpage_bp.view_task', task_id=task.task_id) }}" 
+                        onclick="window.location.href=this.dataset.url;">
+                        View
+                    </button>
+
+                    <button class="btn-edit" 
+                        type="button" 
+                        data-url="{{ url_for('teamLeader_mainpage_bp.edit_task', task_id=task.task_id) }}" 
+                        onclick="window.location.href=this.dataset.url;">
+                        Edit
+                    </button>
+
+                    <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.delete_task', task_id=task.task_id) }}" class="inline-form">
+                        <button class="btn-danger" type="submit" onclick="return confirm('Delete this task?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+        <p class="empty-message">No tasks found for this team.</p>
+    {% endif %}
+    </div>
+
+    <div class="form-section">
+        <h3>Create New Task</h3>
+        <form method="POST" action="{{ url_for('teamLeader_mainpage_bp.create_task', team_id=team_id) }}" class="create-task-form">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="assigned_to">Assign To (email):</label>
+            <input type="email" id="assigned_to" name="assigned_to" required>
+
+            <label for="priority">Priority:</label>
+            <select id="priority" name="priority" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" name="due_date">
+
+            <button type="submit" class="btn-primary">Create Task</button>
+        </form>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="back-btn-container">
+        <button class="btn-back" onclick='window.location.href="/teamLeader-manageTeams";'>⬅ Back to My Teams</button>
+    </div>
 </div>
-
-<h3>Create New Task</h3>
-<form method="POST" action="{{ url_for('teamLeader_mainpage_bp.create_task', team_id=team_id) }}">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required><br><br>
-
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required></textarea><br><br>
-
-    <label for="assigned_to">Assign To (email):</label>
-    <input type="email" id="assigned_to" name="assigned_to" required><br><br>
-
-    <label for="priority">Priority:</label>
-    <select id="priority" name="priority" required>
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-    </select><br><br>
-
-    <label for="due_date">Due Date:</label>
-    <input type="date" id="due_date" name="due_date"><br><br>
-
-    <button type="submit">Create Task</button>
-</form>
-
-<hr>
-<button onclick='window.location.href="/teamLeader-manageTeams";'>⬅ Back to My Teams</button>
 </body>
 </html>
