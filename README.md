@@ -197,11 +197,14 @@ The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
 | **comments**     | Stores user comments per task (with timestamps)           |
 
 
-- users(user_id, username, email, password_hash, role, is_active)
+- users(user_id, username, email, password, role, is_active)
 - teams(team_id, name, description, leader_id, created_at)
 - team_members(team_id, user_id) (many-to-many)
 - tasks(task_id, title, description, status, priority, due_date, created_by, assigned_to)
 - comments(comment_id, task_id, user_id, text, created_at)
+
+
+
 
 ### ER Diagram (conceptual)
 ```
