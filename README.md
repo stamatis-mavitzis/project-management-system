@@ -554,10 +554,9 @@ It uses the helper script `create_tables.sh` to automatically install, configure
 
 ### Setup Instructions
 
-1. Place the files in your project directory:
-```
-create_tables.sh
-database.sql
+1. Redirect your project directory in `database_sql`:
+```bash
+cd database_sql
 ```
 
 2. Make the script executable:
