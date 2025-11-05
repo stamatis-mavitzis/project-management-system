@@ -1,63 +1,79 @@
 # Project Management System (ΠΛΗ513)
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![Flask](https://img.shields.io/badge/flask-3.0-lightgrey)
+![PostgreSQL](https://img.shields.io/badge/postgresql-16-blue)
+![Docker](https://img.shields.io/badge/docker-compose-blue)
+![License](https://img.shields.io/badge/license-Educational-green)
 
-A complete **web-based Project Management System (PMS)** developed as part of the course **ΠΛΗ513 – Υπηρεσίες στο Υπολογιστικό Νέφος και την Ομίχλη**.
-This system implements a simplified version of tools like **Jira** or **Trello**, focusing on team collaboration, task management, and progress tracking — built using **Flask (Python)** and **PostgreSQL**.
+---
+
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [System Architecture](#system-architecture)
+- [Project Structure](#project-structure)
+- [Tech Stack](#tech-stack)
+- [User Roles & Permissions](#user-roles--permissions)
+- [Database Schema](#database-schema)
+- [Configuration](#configuration)
+- [Quickstart Guide](#quickstart-guide)
+- [Docker Deployment](#docker-deployment)
+- [GCP Deployment (Ubuntu VM)](#gcp-deployment-ubuntu-vm)
+- [API Overview & Examples](#api-overview--examples)
+- [Security & Error Handling](#security--error-handling)
+- [Troubleshooting](#troubleshooting)
+- [Contributing & Roadmap](#contributing--roadmap)
+- [Credits & License](#credits--license)
 
 ---
 
 ## Overview
 
-This application allows different roles of users — **Admin**, **Team Leader**, and **Team Member** — to manage teams, create and assign tasks, and collaborate through comments and notifications.
+The Project Management System (PMS) is a web platform designed to streamline teamwork and task management.  
+Developed as part of the ΠΛΗ513 – Services in Cloud and Fog Computing course at the Technical University of Crete, it emulates simplified functionality of tools like Jira or Trello, focusing on collaboration, progress tracking, and team communication.
 
-It follows a **modular microservice-inspired structure** with clear separation between:
-
-* User Authentication
-* Team Management
-* Task and Comment Management
-* Frontend (UI) Rendering
-
-The backend is implemented using **Flask Blueprints**, and the frontend is composed of **Jinja2 HTML templates** integrated with CSS and JavaScript.
+The system supports different user roles (Admin, Team Leader, Team Member) and allows the creation, assignment, and monitoring of tasks in an organized environment.
 
 ---
 
-## Features and Capabilities
+## Features
 
-### Core Features
+### Core Capabilities
+- Multi-role user authentication (Admin / Team Leader / Member)
+- Team and member management
+- Task lifecycle tracking (TODO → IN PROGRESS → DONE)
+- Deadlines and task priorities
+- Comment and discussion threads
+- File uploads for task attachments
+- Notifications for comments or changes
 
-* Multi-role user authentication (Admin / Team Leader / Member)
-* Session-based login/logout system
-* Role-based dashboards and permissions
-* Team creation and member management
-* Task lifecycle tracking (TODO → IN PROGRESS → DONE)
-* Task priority and deadline management
-* Comment and collaboration system per task
-* User activation/deactivation by Admin
-* PostgreSQL relational data model
-* File upload support for extensions defined in configuration
-* HTML/Jinja2 templating and static asset management
+### Optional / Bonus Features
+- Dashboard analytics and team progress charts
+- File attachments in comments
+- Real-time notifications via WebSockets (optional)
 
-### Admin Panel
+---
 
-* Manage all users (activate, deactivate, change roles)
-* Create, delete, and view teams
-* Assign team leaders
-* View all projects and tasks across the system
+## System Architecture
 
-### Team Leader Dashboard
+The PMS follows a modular architecture consisting of:
 
-* Create and manage teams
-* Add or remove team members
-* Create, assign, edit, or delete tasks
-* Add comments on tasks
-* View aggregated team tasks and statuses
+- Frontend Layer: Jinja2 templates, HTML/CSS/JS
+- Backend Layer: Flask blueprints for modular services
+- Database Layer: PostgreSQL relational schema
 
-### Team Member Dashboard
+### Data Flow
+```
+User → Flask Routes (Blueprints) → Service Logic → PostgreSQL DB
+```
 
-* View assigned tasks with deadlines and priorities
-* Comment on tasks
-* Change task status (TODO, IN_PROGRESS, DONE)
-* See team membership and leader information
-* Receive updates and notifications about deadlines and comments
+### Main Components
+| Component       | Description                               |
+|-----------------|-------------------------------------------|
+| Auth Service    | Manages user authentication and sessions  |
+| Team Service    | Handles teams and members                 |
+| Task Service    | Manages tasks and statuses                |
+| Comment Service | Adds comments to tasks                    |
 
 ---
 
@@ -144,153 +160,296 @@ Project/
 
 ---
 
+## Tech Stack
 
+| Layer       | Technology                        |
+|-------------|-----------------------------------|
+| Backend     | Python 3.12, Flask 3.0            |
+| Database    | PostgreSQL 16                     |
+| Frontend    | HTML5, CSS3, JavaScript, Jinja2   |
+| Deployment  | Docker & Docker Compose           |
+| Hosting     | Google Cloud Platform (Ubuntu VM) |
+
+---
+
+## User Roles & Permissions
+
+| Role        | Capabilities                                              |
+|-------------|-----------------------------------------------------------|
+| Admin       | Approve users, assign roles, manage all teams and tasks   |
+| Team Leader | Create/edit tasks, manage team, comment on tasks          |
+| Member      | View and update assigned tasks, add comments              |
+
+---
 
 ## Database Schema
 
-The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
+### Entities
+- users(user_id, username, email, password_hash, role, is_active)
+- teams(team_id, name, description, leader_id, created_at)
+- team_members(team_id, user_id) (many-to-many)
+- tasks(task_id, title, description, status, priority, due_date, created_by, assigned_to)
+- comments(comment_id, task_id, user_id, text, created_at)
 
-| Table            | Description                                               |
-| ---------------- | --------------------------------------------------------- |
-| **users**        | Stores all system users (admins, leaders, members)        |
-| **teams**        | Represents team entities with assigned leaders            |
-| **team_members** | Many-to-many relationship between teams and users         |
-| **tasks**        | Represents team tasks with priority, status, and due date |
-| **comments**     | Stores user comments per task (with timestamps)           |
-
-To initialize the database:
-
-```bash
-psql -U postgres -d project_db -f databe_sql/create_tables.sql
+### ER Diagram (conceptual)
+```
+Users ---< TeamMembers >--- Teams
+Teams ---< Tasks >--- Comments
 ```
 
 ---
 
 ## Configuration
 
-File: `config.py`
-
+Example: `config.py`
 ```python
 DB_CONFIG = {
     "host": "localhost",
     "database": "project_db",
     "user": "postgres",
-    "password": "your_password"
+    "password": "xotour"
 }
-
 SECRET_KEY = "supersecretkey"
 UPLOAD_FOLDER = "static/uploads"
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "pdf"}
 ```
 
 ---
 
-## Installation & Execution
+## Quickstart Guide
 
-### 1. Clone the Repository
+### Local Environment
 
+```bash
+git clone https://github.com/stamatis-mavitzis/project-management-system.git
+cd project-management-system
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+psql -U postgres -d project_db -f database_sql/create_tables.sql
+python backend_server_app.py
+```
+Then visit: **http://127.0.0.1:5000**
+
+---
+
+## Docker Deployment
+
+This project includes a Docker Compose setup running both Flask & PostgreSQL.
+
+```yaml
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: project_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: xotour
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database_sql/create_tables.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+    restart: unless-stopped
+
+  web:
+    build: .
+    container_name: project_app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      FLASK_APP: backend_server_app.py
+      FLASK_ENV: development
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: xotour
+      DB_NAME: postgres
+    command: flask run --host=0.0.0.0 --port=5000
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+```
+
+Run:
+```bash
+docker compose up --build
+```
+
+Stop:
+```bash
+docker compose down
+```
+
+Access App: [http://localhost:5000](http://localhost:5000)
+
+---
+
+## GCP Deployment (Ubuntu VM)
+
+1. **Create a VM Instance**
+   - Platform: Google Cloud Console → Compute Engine → VM Instances
+   - OS: Ubuntu 22.04 LTS
+   - Firewall: Allow HTTP/HTTPS traffic
+
+2. **Connect via SSH**
+```bash
+gcloud compute ssh <instance-name> --zone=<your-zone>
+```
+
+3. **Install Dependencies**
+```bash
+sudo apt update && sudo apt install -y docker.io docker-compose git
+```
+
+4. **Clone the Repository**
 ```bash
 git clone https://github.com/stamatis-mavitzis/project-management-system.git
 cd project-management-system
 ```
 
-### 2. Set Up Virtual Environment
-
+5. **Run the App**
 ```bash
-python3 -m venv venv
-source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
+sudo docker compose up --build -d
 ```
 
-### 3. Install Dependencies
+6. **Open Port**
+Ensure port 5000 is open under VPC Network → Firewall Rules.
 
-```bash
-pip install -r requirements.txt
+Access the app at:
 ```
-
-### 4. Configure Database
-
-Update credentials in `config.py` and create the database schema:
-
-```bash
-psql -U postgres -d project_db -f databe_sql/create_tables.sql
-```
-
-### 5. Run Flask Application
-
-```bash
-source source_run_flash.sh
-# or manually:
-python3 backend_server_app.py
-```
-
-### 6. Access Application
-
-Open your browser at:
-
-```
-http://127.0.0.1:5000/
+http://<VM_EXTERNAL_IP>:5000
 ```
 
 ---
 
-## Role Functionality Summary
+## API Overview & Examples
 
-| Role            | Capabilities                                                |
-| --------------- | ----------------------------------------------------------- |
-| **Admin**       | Manage users, teams, and roles; view all projects and tasks |
-| **Team Leader** | Manage teams, create tasks, edit tasks, add comments        |
-| **Team Member** | View assigned tasks, change task status, comment            |
-
----
-
-## Tech Stack
-
-| Layer             | Technology                               |
-| ----------------- | ---------------------------------------- |
-| **Backend**       | Python 3, Flask                          |
-| **Database**      | PostgreSQL                               |
-| **Frontend**      | HTML, CSS, JavaScript, Jinja2            |
-| **Hosting Ready** | Docker-compatible structure              |
-| **Libraries**     | Flask, psycopg2-binary, Werkzeug, Jinja2 |
-
----
-
-## Development and Deployment
-
-### Local Development
-
-Run all Flask services through `source_run_flash.sh` for quick setup.
-
-### Docker Deployment (optional)
-
-```dockerfile
-FROM python:3.12-slim
-WORKDIR /app
-COPY . /app
-RUN pip install -r requirements.txt
-EXPOSE 5000
-CMD ["flask", "run", "--host=0.0.0.0"]
+### Auth Service
+**POST /signup**
+```json
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "secret",
+  "role": "member"
+}
+```
+Response:
+```json
+{"message": "User created successfully. Awaiting admin approval."}
 ```
 
-Run:
-
-```bash
-docker build -t pms-app .
-docker run -p 5000:5000 pms-app
+**POST /login**
+```json
+{"username": "john_doe", "password": "secret"}
+```
+Response:
+```json
+{"message": "Login successful", "role": "Team Leader"}
 ```
 
 ---
 
-## Author
+### Team Service
+**POST /teams** (Admin only)
+```json
+{"team_name": "DevOps", "description": "CI/CD team", "leader_id": 3}
+```
 
-**Stamatios Mavitzis**
-Student ID: *2018030040*
-Course: *ΠΛΗ513 – Υπηρεσίες στο Υπολογιστικό Νέφος και την Ομίχλη*
-Technical University of Crete
+**GET /teams**
+Returns all teams related to the logged-in user.
 
 ---
 
-## License
+### Task Service
+**POST /tasks**
+```json
+{
+  "title": "Implement Login",
+  "description": "Add authentication",
+  "assigned_to": 5,
+  "priority": "High",
+  "due_date": "2025-12-01"
+}
+```
 
-This project is open-source and distributed for **educational and academic use** only.
+**PATCH /tasks/5**
+```json
+{"status": "DONE"}
+```
+
+---
+
+### Comment Service
+**POST /tasks/<task_id>/comments**
+```json
+{"comment_text": "Testing completed", "user_id": 4}
+```
+
+**GET /tasks/<task_id>/comments**
+Retrieves all comments for the specified task.
+
+---
+
+## Security & Error Handling
+
+- Passwords hashed using Werkzeug.
+- Flask session-based authentication.
+- Input validation for SQL safety.
+- Custom error messages and flash notifications.
+
+Error example:
+```json
+{"error": "Invalid credentials"}
+```
+
+---
+
+## Troubleshooting
+
+| Issue | Cause | Solution |
+|--------|--------|-----------|
+| Port 5000 busy | Another app running | Change host port in docker-compose.yml |
+| Database connection error | Postgres not healthy | Run `docker compose logs db` |
+| Flask not reloading | Missing volume bind | Ensure `- .:/app` is included |
+
+---
+
+## Contributing & Roadmap
+
+### How to Contribute
+1. Fork the repo  
+2. Create a feature branch (`feature/new-module`)  
+3. Commit changes (`git commit -m "Add new feature"`)  
+4. Push and create a Pull Request
+
+### Roadmap
+- [ ] Add RESTful API documentation (Swagger/OpenAPI)
+- [ ] Implement WebSocket notifications
+- [ ] Add analytics dashboard
+- [ ] Set up CI/CD pipeline (GitHub Actions)
+
+---
+
+## Credits & License
+
+**Author:** Stamatios Mavitzis  
+**Student ID:** 2018030040  
+**Course:** ΠΛΗ513 – Services in Cloud and Fog Computing  
+**Institution:** Technical University of Crete
+
+This project is open-source and distributed for educational and academic use only.
