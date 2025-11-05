@@ -427,6 +427,77 @@ button {
 
 
 
+/* ===== FORCE "View" / "Edit" / "Delete" SIDE-BY-SIDE IN ACTIONS CELL ===== */
 
+/* Highest-specificity target of that last <td> with class task-actions */
+table.styled-table tr td.task-actions {
+  /* Try CSS Grid first (most reliable inside table cells) */
+  display: grid !important;
+  grid-auto-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;          /* prevents wrapping to new lines */
+  padding-top: 8px;             /* keep nice vertical rhythm */
+}
+
+/* If Grid isn’t supported, fall back to flex */
+@supports not (display: grid) {
+  table.styled-table tr td.task-actions {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+}
+
+/* Make sure inner blocks don’t force line breaks */
+table.styled-table tr td.task-actions form {
+  display: inline-grid !important;   /* inline context, but keeps button sizing clean */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Normalize all buttons inside the actions cell */
+table.styled-table tr td.task-actions button {
+  display: inline-block !important;
+  margin: 0 !important;
+  vertical-align: middle;
+}
+
+/* Extra hardening in case another rule targets generic TDs */
+.styled-table td:last-child {
+  white-space: nowrap;
+}
+
+
+/* =======================================================
+   Fix table row borders alignment
+   ======================================================= */
+
+/* Remove browser default border spacing */
+.styled-table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  width: 100%;
+}
+
+/* Give all rows consistent bottom border */
+.styled-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+/* Remove double borders from last row */
+.styled-table tr:last-child {
+  border-bottom: none;
+}
+
+/* Remove default cell borders to keep clean grid lines */
+.styled-table td, 
+.styled-table th {
+  border: none;
+}
 
 
