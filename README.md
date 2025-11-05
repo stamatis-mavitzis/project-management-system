@@ -144,6 +144,8 @@ Project/
 
 ---
 
+
+
 ## Database Schema
 
 The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
