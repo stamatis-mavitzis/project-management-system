@@ -46,6 +46,8 @@ The system supports different user roles (Admin, Team Leader, Team Member) and a
 - Comment and discussion threads
 - File uploads for task attachments
 - Notifications for comments or changes
+- Comment and discussion threads with optional file attachments  
+  (Team Leaders and Members can upload a file when posting a comment)
 
 ### Optional / Bonus Features
 - Dashboard analytics and team progress charts
@@ -174,11 +176,12 @@ Project/
 
 ## User Roles & Permissions
 
-| Role        | Capabilities                                              |
-|-------------|-----------------------------------------------------------|
-| Admin       | Approve users, assign roles, manage all teams and tasks   |
-| Team Leader | Create/edit tasks, manage team, comment on tasks          |
-| Member      | View and update assigned tasks, add comments              |
+| Role        | Capabilities                                                                  |
+|-------------|-------------------------------------------------------------------------------|
+| Admin       | Approve users, assign roles, manage all teams and tasks                       |
+| Team Leader | Create/edit tasks, manage team, comment on tasks, upload files in comments    |
+| Member      | View/update assigned tasks, comment on tasks, upload files in comments        |
+
 
 ---
 
@@ -201,7 +204,7 @@ The PostgreSQL schema is defined in **`create_tables.sql`** and includes:
 - teams(team_id, name, description, leader_id, created_at)
 - team_members(team_id, user_id) (many-to-many)
 - tasks(task_id, title, description, status, priority, due_date, created_by, assigned_to)
-- comments(comment_id, task_id, user_id, text, created_at)
+- comments(comment_id, task_id, user_id, text, file_path, created_at)
 
 To initialize the database:
 
@@ -461,6 +464,12 @@ Returns all teams related to the logged-in user.
 
 ### Comment Service
 **POST /tasks/<task_id>/comments**
+
+Both Team Leaders and Members can attach a file when submitting a comment.
+Uploaded files are stored under `static/uploads/` and are linked to the associated
+task comment. Allowed file types are defined in `config.py` through the
+ALLOWED_EXTENSIONS setting.
+
 ```json
 {"comment_text": "Testing completed", "user_id": 4}
 ```
