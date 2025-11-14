@@ -74,6 +74,22 @@
                             <strong>{{ comment.username }}</strong>
                             <em>({{ comment.created_at | format_date }})</em><br>
                             <span>{{ comment.content }}</span>
+
+                            <!-- ATTACHMENTS -->
+                            {% set atts = attachments_by_comment.get(comment.comment_id) %}
+                            {% if atts %}
+                                <ul class="attachment-list">
+                                    {% for a in atts %}
+                                        <li>
+                                            <a href="{{ url_for('static', filename=a.file_path) }}" download>
+                                                📎 {{ a.file_name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <!-- END ATTACHMENTS -->
+
                         </div>
                     </li>
                 {% endfor %}
@@ -86,13 +102,17 @@
     <!-- Add Comment Form -->
     <div class="card form-section">
         <h3>Add a Comment</h3>
-        <form action="{{ url_for('teamLeader_mainpage_bp.add_comment', task_id=task.task_id) }}" method="POST">
+        <form action="{{ url_for('teamLeader_mainpage_bp.add_comment', task_id=task.task_id) }}"
+              method="POST" enctype="multipart/form-data">
+
             <textarea name="content" placeholder="Write your comment..." required></textarea>
+
+            <input type="file" name="file" accept=".png,.jpg,.jpeg,.gif,.pdf"><br><br>
+
             <button type="submit" class="btn-primary">💬 Add Comment</button>
         </form>
     </div>
 
-    <!-- Back Button at Bottom -->
     <div class="back-btn-container">
         <form action="{{ url_for('teamLeader_mainpage_bp.teamLeader_manage_team', team_id=team_id) }}" method="get">
             <button type="submit" class="btn-back">← Back to Team</button>

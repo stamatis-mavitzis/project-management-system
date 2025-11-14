@@ -255,9 +255,9 @@ def view_task(task_id):
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
-        # -------------------------------
-        # 🔹 Λήψη στοιχείων του task
-        # -------------------------------
+        # ----------------------------------------------
+        # LOAD TASK (NO team_name — your DB doesn't have it)
+        # ----------------------------------------------
         cur.execute("""
             SELECT 
                 t.task_id,
@@ -266,7 +266,7 @@ def view_task(task_id):
                 t.status,
                 t.priority,
                 t.due_date,
-                t.team_id,  -- ✅ Add this line
+                t.team_id,
                 cu.username AS created_by_username,
                 au.username AS assigned_to_username
             FROM tasks t
@@ -280,13 +280,14 @@ def view_task(task_id):
             flash("Task not found.", "error")
             return redirect(url_for("teamLeader_mainpage_bp.teamLeader_manage_teams"))
 
-        # -------------------------------
-        # 💬 Λήψη σχολίων του task
-        # -------------------------------
+        # ----------------------------------------------
+        # LOAD COMMENTS
+        # ----------------------------------------------
         cur.execute("""
             SELECT 
-                c.content, 
-                c.created_at, 
+                c.comment_id,
+                c.content,
+                c.created_at,
                 u.username
             FROM comments c
             JOIN users u ON c.author_id = u.user_id
@@ -295,11 +296,31 @@ def view_task(task_id):
         """, (task_id,))
         comments = cur.fetchall()
 
+        # ----------------------------------------------
+        # LOAD ATTACHMENTS
+        # ----------------------------------------------
+        cur.execute("""
+            SELECT 
+                attachment_id,
+                file_name,
+                file_path,
+                comment_id
+            FROM attachments
+            WHERE task_id = %s;
+        """, (task_id,))
+        attachment_rows = cur.fetchall()
+
+        # Group attachments by comment_id
+        attachments_by_comment = {}
+        for a in attachment_rows:
+            attachments_by_comment.setdefault(a["comment_id"], []).append(a)
+
     except Exception as e:
         conn.rollback()
         flash(f"Error loading task: {e}", "error")
         comments = []
         task = None
+        attachments_by_comment = {}
 
     finally:
         cur.close()
@@ -308,8 +329,17 @@ def view_task(task_id):
     if not task:
         return redirect(url_for("teamLeader_mainpage_bp.teamLeader_manage_teams"))
 
-    # ✅ Pass team_id to template
-    return render_template("teamLeader_viewTask.html", task=task, comments=comments, team_id=task["team_id"])
+    # -------------------------------------------------------
+    # RETURN WITH attachments_by_comment INCLUDED
+    # -------------------------------------------------------
+    return render_template(
+        "teamLeader_viewTask.html",
+        task=task,
+        comments=comments,
+        attachments_by_comment=attachments_by_comment,
+        team_id=task["team_id"]
+    )
+
 
 
 

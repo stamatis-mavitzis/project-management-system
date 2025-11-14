@@ -2,6 +2,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from psycopg2.extras import RealDictCursor  # type: ignore
 from db import get_db_connection
 
+from werkzeug.utils import secure_filename
+from config import UPLOAD_FOLDER, ALLOWED_EXTENSIONS
+import os
+
 member_mainpage_bp = Blueprint("member_mainpage_bp", __name__)
 
 # ---------------------------------------------
@@ -180,7 +184,9 @@ def member_view_task(task_id):
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # Get full task details including team name and proper aliases
+    # ---------------------------------------------------
+    # Load task details (NO team_name)
+    # ---------------------------------------------------
     cur.execute("""
         SELECT 
             t.task_id,
@@ -189,35 +195,74 @@ def member_view_task(task_id):
             t.status,
             t.priority,
             t.due_date,
-            tm.name AS team_name,
+            t.created_at,
             cu.username AS created_by_username,
-            au.username AS assigned_to_username
+            au.username AS assigned_to_username,
+            tm.team_id,
+            NULL AS team_name         -- database does NOT contain team_name
         FROM tasks t
-        LEFT JOIN users cu ON t.created_by = cu.user_id
-        LEFT JOIN users au ON t.assigned_to = au.user_id
-        LEFT JOIN teams tm ON t.team_id = tm.team_id
+        JOIN users cu ON t.created_by = cu.user_id
+        JOIN users au ON t.assigned_to = au.user_id
+        JOIN teams tm ON t.team_id = tm.team_id
         WHERE t.task_id = %s;
     """, (task_id,))
+    
     task = cur.fetchone()
 
-    # Get comments
+    if not task:
+        cur.close()
+        conn.close()
+        flash("Task not found.", "error")
+        return redirect(url_for("member_mainpage_bp.member_view_tasks"))
+
+    # ---------------------------------------------------
+    # Load comments
+    # ---------------------------------------------------
     cur.execute("""
-        SELECT c.content, c.created_at, u.username
+        SELECT 
+            c.comment_id,
+            c.content,
+            c.created_at,
+            u.username
         FROM comments c
         JOIN users u ON c.author_id = u.user_id
         WHERE c.task_id = %s
         ORDER BY c.created_at DESC;
     """, (task_id,))
+    
     comments = cur.fetchall()
+
+    # ---------------------------------------------------
+    # Load attachments
+    # ---------------------------------------------------
+    cur.execute("""
+        SELECT 
+            attachment_id,
+            file_name,
+            file_path,
+            comment_id
+        FROM attachments
+        WHERE task_id = %s;
+    """, (task_id,))
+    
+    attachment_rows = cur.fetchall()
+
+    attachments_by_comment = {}
+    for a in attachment_rows:
+        attachments_by_comment.setdefault(a["comment_id"], []).append(a)
 
     cur.close()
     conn.close()
 
-    if not task:
-        flash("Task not found.", "error")
-        return redirect(url_for("member_mainpage_bp.member_view_tasks"))
+    return render_template(
+        "member_viewTask.html",
+        task=task,
+        comments=comments,
+        attachments_by_comment=attachments_by_comment
+    )
 
-    return render_template("member_viewTask.html", task=task, comments=comments)
+
+
 
 
 
@@ -231,6 +276,8 @@ def member_add_comment(task_id):
         return redirect("/member-login")
 
     content = request.form.get("content")
+    file = request.files.get("file")
+
     if not content:
         flash("Comment cannot be empty.", "error")
         return redirect(url_for("member_mainpage_bp.member_add_comment_page", task_id=task_id))
@@ -240,7 +287,7 @@ def member_add_comment(task_id):
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # Find member's ID
+    # Find member ID
     cur.execute("SELECT user_id FROM users WHERE email = %s;", (member_email,))
     member = cur.fetchone()
     if not member:
@@ -249,18 +296,54 @@ def member_add_comment(task_id):
         conn.close()
         return redirect(url_for("member_mainpage_bp.member_add_comment_page", task_id=task_id))
 
-    # Insert comment
+    author_id = member["user_id"]
+
+    # Insert comment and return ID
     cur.execute("""
         INSERT INTO comments (task_id, author_id, content, created_at)
-        VALUES (%s, %s, %s, NOW());
-    """, (task_id, member["user_id"], content))
-    conn.commit()
+        VALUES (%s, %s, %s, NOW())
+        RETURNING comment_id
+    """, (task_id, author_id, content))
+    comment_id = cur.fetchone()["comment_id"]
 
+    # Handle file upload
+    if file and file.filename:
+        filename = secure_filename(file.filename)
+
+        if "." not in filename:
+            flash("Invalid file name.", "error")
+            conn.rollback()
+            cur.close()
+            conn.close()
+            return redirect(url_for("member_mainpage_bp.member_add_comment_page", task_id=task_id))
+
+        ext = filename.rsplit(".", 1)[1].lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            flash(f"File type .{ext} not allowed.", "error")
+            conn.rollback()
+            cur.close()
+            conn.close()
+            return redirect(url_for("member_mainpage_bp.member_add_comment_page", task_id=task_id))
+
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+        file_system_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_system_path)
+
+        db_path = os.path.join("uploads", filename)
+
+        cur.execute("""
+            INSERT INTO attachments (file_name, file_path, uploaded_by, task_id, comment_id)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (filename, db_path, author_id, task_id, comment_id))
+
+    conn.commit()
     cur.close()
     conn.close()
 
-    flash("✅ Comment added successfully!", "success")
+    flash("Comment added successfully!", "success")
     return redirect(url_for("member_mainpage_bp.member_view_tasks"))
+
 
 
 # ---------------------------------------------
