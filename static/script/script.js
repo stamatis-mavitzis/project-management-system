@@ -12,10 +12,10 @@ function activateUser(username) {
         alert(data.message);
         location.reload();
       } else {
-        alert(`❌ Error activating ${username}: ${data.error}`);
+        alert(`Error activating ${username}: ${data.error}`);
       }
     })
-    .catch(err => alert(`⚠️ Network error: ${err}`));
+    .catch(err => alert(`Network error: ${err}`));
 }
 
 // --- Deactivate User ---
@@ -28,10 +28,10 @@ function deactivateUser(username) {
         alert(data.message);
         location.reload();
       } else {
-        alert(`❌ Error deactivating ${username}: ${data.error}`);
+        alert(`Error deactivating ${username}: ${data.error}`);
       }
     })
-    .catch(err => alert(`⚠️ Network error: ${err}`));
+    .catch(err => alert(`Network error: ${err}`));
 }
 
 // --- Change User Role ---
@@ -50,10 +50,10 @@ function changeRole(username) {
         alert(data.message);
         location.reload();
       } else {
-        alert(`❌ Failed to change role for ${username}: ${data.error}`);
+        alert(`Failed to change role for ${username}: ${data.error}`);
       }
     })
-    .catch(err => alert(`⚠️ Network error: ${err}`));
+    .catch(err => alert(`Network error: ${err}`));
 }
 
 // --- View Team ---
@@ -71,10 +71,10 @@ function deleteTeam(teamId) {
         alert(data.message);
         location.reload();
       } else {
-        alert(`❌ Error deleting team: ${data.error}`);
+        alert(`Error deleting team: ${data.error}`);
       }
     })
-    .catch(err => alert(`⚠️ Network error: ${err}`));
+    .catch(err => alert(`Network error: ${err}`));
 }
 
 
