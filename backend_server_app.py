@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# ✅ Add global date formatting filter before app runs
+# Add global date formatting filter before app runs
 @app.template_filter('format_date')
 def format_date(value):
     """Formats a datetime/date value as dd/mm/yyyy."""
@@ -85,7 +85,7 @@ def add_aliases(app):
                     view_func=app.view_functions[rule.endpoint],
                     methods=rule.methods
                 )
-    print("✅ Old client endpoints successfully restored.")
+    print("Old client endpoints successfully restored.")
 
 
 # Run this after all blueprints are registered

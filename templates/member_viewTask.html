@@ -25,22 +25,22 @@
 
       <!-- Your database has no team_name column -->
       <!-- So we either show team_id or "-" -->
-      <p><strong>🧩 Team:</strong> {{ task.team_id }}</p>
+      <p><strong>Team:</strong> {{ task.team_id }}</p>
 
       <p><strong>👤 Created by:</strong> {{ task.created_by_username }}</p>
       <p>
-        <strong>📊 Status:</strong>
+        <strong>Status:</strong>
         <span class="status {{ task.status|lower }}">{{ task.status }}</span>
       </p>
       <p>
         <strong>⚡ Priority:</strong>
         <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span>
       </p>
-      <p><strong>⏰ Due:</strong> {{ task.due_date | format_date if task.due_date else "-" }}</p>
+      <p><strong>Due:</strong> {{ task.due_date | format_date if task.due_date else "-" }}</p>
     </div>
     
     <div class="comments-section">
-      <h2>💬 Comments</h2>
+      <h2>Comments</h2>
       {% if comments %}
         <ul class="comment-list">
           {% for c in comments %}
@@ -59,7 +59,7 @@
                   {% for a in atts %}
                     <li>
                       <a href="{{ url_for('static', filename=a.file_path) }}" download>
-                          📎 {{ a.file_name }}
+                          {{ a.file_name }}
                       </a>
                     </li>
                   {% endfor %}

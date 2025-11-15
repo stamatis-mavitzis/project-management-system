@@ -12,7 +12,7 @@ COMMIT_MSG=${1:-"Auto-commit: update project files"}
 
 # Print header
 echo "---------------------------------------------"
-echo "🚀 Starting Git Auto Push..."
+echo "Starting Git Auto Push..."
 echo "---------------------------------------------"
 
 # Add all files
@@ -28,5 +28,5 @@ git pull origin main --rebase
 git push origin main
 
 echo "---------------------------------------------"
-echo "✅ Successfully pushed to GitHub!"
+echo "Successfully pushed to GitHub!"
 echo "---------------------------------------------"

@@ -10,7 +10,7 @@
 <body>
 
 <div class="header">
-    <h1>📋 Task Details</h1>
+    <h1>Task Details</h1>
 </div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -64,7 +64,7 @@
 
     <!-- Comments Section -->
     <div class="card">
-        <h2>💬 Comments</h2>
+        <h2>Comments</h2>
         {% if comments %}
             <ul class="member-list">
                 {% for comment in comments %}
@@ -109,7 +109,7 @@
 
             <input type="file" name="file" accept=".png,.jpg,.jpeg,.gif,.pdf"><br><br>
 
-            <button type="submit" class="btn-primary">💬 Add Comment</button>
+            <button type="submit" class="btn-primary">Add Comment</button>
         </form>
     </div>
 
