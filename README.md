@@ -281,7 +281,7 @@ python backend_server_app.py
 
 Once the application starts successfully, open your browser and visit:
 
-👉 **http://127.0.0.1:5000**
+--> **http://127.0.0.1:5000**
 
 This will launch the PMS web interface, where you can:
 - **Sign up or log in** as Admin, Team Leader, or Team Member.  
