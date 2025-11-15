@@ -10,24 +10,24 @@ DB_PASS="xotour"
 DB_NAME="project_db"
 SQL_FILE="database.sql"
 
-echo "🚀 Starting PostgreSQL setup..."
+echo "Starting PostgreSQL setup..."
 echo "---------------------------------------"
 
-# 1️⃣ Check if PostgreSQL is installed
+# Check if PostgreSQL is installed
 if ! command -v psql > /dev/null 2>&1; then
-  echo "📦 PostgreSQL not found. Installing..."
+  echo "PostgreSQL not found. Installing..."
   sudo apt update -y
   sudo apt install -y postgresql postgresql-contrib
 else
-  echo "✅ PostgreSQL is already installed."
+  echo "PostgreSQL is already installed."
 fi
 
-# 2️⃣ Ensure PostgreSQL service is running
-echo "🔄 Ensuring PostgreSQL service is running..."
+# Ensure PostgreSQL service is running
+echo "Ensuring PostgreSQL service is running..."
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
 
-# 3️⃣ Switch to postgres user and execute SQL commands
+# Switch to postgres user and execute SQL commands
 sudo -u postgres psql <<EOF
 -- Drop database if exists
 DROP DATABASE IF EXISTS ${DB_NAME};
@@ -40,29 +40,29 @@ CREATE DATABASE ${DB_NAME} OWNER ${DB_USER};
 GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_USER};
 EOF
 
-echo "✅ Database '${DB_NAME}' and user '${DB_USER}' created successfully."
+echo "Database '${DB_NAME}' and user '${DB_USER}' created successfully."
 
-# 4️⃣ Import schema & data from SQL file
+# Import schema & data from SQL file
 if [ -f "$SQL_FILE" ]; then
-  echo "📥 Importing schema and data from ${SQL_FILE} ..."
+  echo "Importing schema and data from ${SQL_FILE} ..."
   sudo -u postgres psql -d "${DB_NAME}" -f "${SQL_FILE}" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
-    echo "✅ Database import completed successfully."
+    echo "Database import completed successfully."
   else
-    echo "❌ Error occurred during import. Check SQL file for issues."
+    echo "Error occurred during import. Check SQL file for issues."
   fi
 else
-  echo "⚠️ SQL file ${SQL_FILE} not found. Skipping import."
+  echo "SQL file ${SQL_FILE} not found. Skipping import."
 fi
 
-# 5️⃣ Test connection with created user
-echo "🔍 Testing connection..."
+# Test connection with created user
+echo "Testing connection..."
 PGPASSWORD="${DB_PASS}" psql -U "${DB_USER}" -d "${DB_NAME}" -h localhost -c "\dt" > /dev/null 2>&1
 if [ $? -eq 0 ]; then
-  echo "✅ Connection test successful! Setup completed."
+  echo "Connection test successful! Setup completed."
 else
-  echo "❌ Connection test failed. Check credentials or PostgreSQL status."
+  echo "Connection test failed. Check credentials or PostgreSQL status."
 fi
 
 echo "---------------------------------------"
-echo "🎯 Setup finished. Database '${DB_NAME}' ready for use."
+echo "Setup finished. Database '${DB_NAME}' ready for use."

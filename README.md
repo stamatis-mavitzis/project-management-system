@@ -91,7 +91,8 @@ Project/
 ├── source_run_flash.sh                   # Shell script to start the Flask server
 │
 ├── database_sql/                         # Database schema and setup files
-│   ├── create_tables.sh                  # Bash script for creating tables and inserting initial data
+│   ├── create_tables.sh                  # Bash script for creating tables and inserting initial data for local execution
+│   ├── docker_init_restore.sh            # Script used by Docker container to initialize/restore DB
 │   └── database.db                       # SQLite or PostgreSQL export (sample database)
 │
 ├── routes/                               # Flask Blueprints (Microservices logic)
