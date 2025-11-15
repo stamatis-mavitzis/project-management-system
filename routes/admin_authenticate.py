@@ -23,7 +23,7 @@ def admin_signup():
 
         conn = get_db_connection()
         if isinstance(conn, str):
-            return f"❌ Database connection failed: {conn}"
+            return f"Database connection failed: {conn}"
 
         cur = conn.cursor(cursor_factory=RealDictCursor)
         try:
@@ -36,11 +36,11 @@ def admin_signup():
             new_admin = cur.fetchone()
             conn.commit()
 
-            flash(f"✅ Admin account created successfully for {new_admin['email']}! Awaiting admin activation.", "success")
+            flash(f"Admin account created successfully for {new_admin['email']}! Awaiting admin activation.", "success")
             return redirect(url_for("admin_authenticate_bp.admin_login"))
         except Exception as e:
             conn.rollback()
-            flash(f"❌ Error creating admin: {e}", "error")
+            flash(f"Error creating admin: {e}", "error")
             return redirect(url_for("admin_authenticate_bp.admin_signup"))
         finally:
             cur.close()
@@ -70,11 +70,11 @@ def admin_login():
             admin = cur.fetchone()
 
             if not admin:
-                flash("❌ No admin account found with that email.", "error")
+                flash("No admin account found with that email.", "error")
                 return redirect(url_for("admin_authenticate_bp.admin_login"))
 
             if admin["password"] != password:
-                flash("❌ Incorrect password.", "error")
+                flash("Incorrect password.", "error")
                 return redirect(url_for("admin_authenticate_bp.admin_login"))
 
             if admin["status"] != "ACTIVE":
@@ -90,7 +90,7 @@ def admin_login():
             return redirect("/admin-mainpage")
 
         except Exception as e:
-            flash(f"❌ Error during login: {e}", "error")
+            flash(f"Error during login: {e}", "error")
             return redirect(url_for("admin_authenticate_bp.admin_login"))
         finally:
             cur.close()
@@ -106,5 +106,5 @@ def admin_login():
 def logout():
     """Logs out the admin and clears the session."""
     session.clear()
-    flash("✅ You have been logged out.", "success")
+    flash("You have been logged out.", "success")
     return redirect("/")

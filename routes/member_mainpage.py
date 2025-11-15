@@ -388,10 +388,10 @@ def member_change_status(task_id):
     try:
         cur.execute("UPDATE tasks SET status = %s WHERE task_id = %s;", (new_status, task_id))
         conn.commit()
-        flash(f"✅ Task status updated to {new_status}!", "success")
+        flash(f"Task status updated to {new_status}!", "success")
     except Exception as e:
         conn.rollback()
-        flash(f"❌ Error updating status: {e}", "error")
+        flash(f"Error updating status: {e}", "error")
     finally:
         cur.close()
         conn.close()

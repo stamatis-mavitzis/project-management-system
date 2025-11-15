@@ -23,7 +23,7 @@ def member_signup():
 
         conn = get_db_connection()
         if isinstance(conn, str):
-            return f"❌ Database connection failed: {conn}"
+            return f"Database connection failed: {conn}"
 
         cur = conn.cursor(cursor_factory=RealDictCursor)
         try:
@@ -39,12 +39,12 @@ def member_signup():
 
             session["member_id"] = new_user["user_id"]
             session["member_email"] = new_user["email"]
-            flash(f"✅ Member account created successfully for {new_user['email']}! Awaiting admin activation.", "success")
+            flash(f"Member account created successfully for {new_user['email']}! Awaiting admin activation.", "success")
             return redirect(url_for("member_authenticate_bp.member_login"))
 
         except Exception as e:
             conn.rollback()
-            flash(f"❌ Error creating Member: {e}", "error")
+            flash(f"Error creating Member: {e}", "error")
             return redirect(url_for("member_authenticate_bp.member_login"))
         finally:
             cur.close()
@@ -65,7 +65,7 @@ def member_login():
 
         conn = get_db_connection()
         if isinstance(conn, str):
-            return f"❌ Database connection failed: {conn}"
+            return f"Database connection failed: {conn}"
 
         cur = conn.cursor(cursor_factory=RealDictCursor)
         try:
@@ -78,27 +78,27 @@ def member_login():
             member = cur.fetchone()
 
             if not member:
-                flash("❌ No member account found with that email.", "error")
+                flash("No member account found with that email.", "error")
                 return redirect(url_for("member_authenticate_bp.member_login"))
 
             if member["password"] != password:
-                flash("❌ Incorrect password.", "error")
+                flash("Incorrect password.", "error")
                 return redirect(url_for("member_authenticate_bp.member_login"))
 
             if member["status"] != "ACTIVE":
-                flash("⚠️ Account not active yet. Please wait for admin approval.", "warning")
+                flash("Account not active yet. Please wait for admin approval.", "warning")
                 return redirect(url_for("member_authenticate_bp.member_login"))
 
-            # ✅ Login successful
+            # Login successful
             session["member_id"] = member["user_id"]
             session["member_email"] = member["email"]
             session["member_username"] = member["username"]
 
-            flash("✅ Member login successful!", "success")
+            flash("Member login successful!", "success")
             return redirect(url_for("member_mainpage_bp.member_mainpage"))
 
         except Exception as e:
-            flash(f"❌ Error during login: {e}", "error")
+            flash(f"Error during login: {e}", "error")
             return redirect(url_for("member_authenticate_bp.member_login"))
         finally:
             cur.close()
@@ -114,5 +114,5 @@ def member_login():
 def logout():
     """Logs out the member and clears the session."""
     session.clear()
-    flash("✅ You have been logged out.", "success")
+    flash("You have been logged out.", "success")
     return redirect("/")

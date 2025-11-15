@@ -212,7 +212,7 @@ def create_task(team_id):
     description = request.form.get("description")
     assigned_email = request.form.get("assigned_to")
     due_date = request.form.get("due_date")
-    priority = request.form.get("priority").upper()  # ✅ Fix here
+    priority = request.form.get("priority").upper()
 
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -520,5 +520,5 @@ def add_comment(task_id):
     cur.close()
     conn.close()
 
-    flash("✅ Comment added successfully!", "success")
+    flash("Comment added successfully!", "success")
     return redirect(url_for("teamLeader_mainpage_bp.view_task", task_id=task_id))

@@ -72,7 +72,7 @@ def admin_manage_teams():
         leader_username = request.form.get("leader_username")
 
         if not all([team_name, description, leader_username]):
-            flash("⚠️ Please fill in all fields.", "error")
+            flash("Please fill in all fields.", "error")
             return redirect(url_for("admin_mainpage_bp.admin_manage_teams"))
 
         cur.execute(
@@ -82,7 +82,7 @@ def admin_manage_teams():
         leader = cur.fetchone()
 
         if not leader:
-            flash("❌ Leader not found or not a TEAM_LEADER.", "error")
+            flash("Leader not found or not a TEAM_LEADER.", "error")
             conn.close()
             return redirect(url_for("admin_mainpage_bp.admin_manage_teams"))
 
@@ -93,7 +93,7 @@ def admin_manage_teams():
             VALUES (%s, %s, %s, NOW());
         """, (team_name, description, leader_id))
         conn.commit()
-        flash("✅ Team created successfully!", "success")
+        flash("Team created successfully!", "success")
         return redirect(url_for("admin_mainpage_bp.admin_manage_teams"))
 
     cur.execute("""
@@ -131,10 +131,10 @@ def activate_user(username):
             WHERE username = %s;
         """, (username,))
         conn.commit()
-        return jsonify({"message": f"✅ User {username} activated successfully!"}), 200
+        return jsonify({"message": f"User {username} activated successfully!"}), 200
     except Exception as e:
         conn.rollback()
-        print("❌ ERROR activating user:", e)
+        print("ERROR activating user:", e)
         return jsonify({"error": str(e)}), 500
     finally:
         cur.close()
@@ -149,7 +149,7 @@ def deactivate_user(username):
     try:
         cur.execute("UPDATE users SET status = 'INACTIVE' WHERE username = %s;", (username,))
         conn.commit()
-        return jsonify({"message": f"⚠️ User {username} deactivated."}), 200
+        return jsonify({"message": f"User {username} deactivated."}), 200
     except Exception as e:
         conn.rollback()
         return jsonify({"error": str(e)}), 500
@@ -201,7 +201,7 @@ def admin_show_tasks_and_projects():
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # ✅ Get all projects (teams)
+    # Get all projects (teams)
     cur.execute("""
         SELECT 
             t.team_id,
@@ -215,7 +215,7 @@ def admin_show_tasks_and_projects():
     """)
     projects = cur.fetchall()
 
-    # ✅ Get all tasks including the leader who assigned them
+    # Get all tasks including the leader who assigned them
     cur.execute("""
         SELECT 
             ta.task_id,
